@@ -23,32 +23,33 @@
         .resume-container {
             background: white;
             width: 8.5in;
-            min-height: 11in;
+            height: 11in;
+            max-height: 11in;
             margin: 20px auto;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
             position: relative;
             display: flex;
+            overflow: hidden;
         }
 
         .sidebar {
             width: 35%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 40px 30px;
+            padding: 30px 25px;
         }
 
         .main-content {
             width: 65%;
-            padding: 40px;
+            padding: 30px 35px;
         }
 
         .profile-photo-section {
-            width: 180px;
-            height: 180px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
-            margin: 0 auto 30px;
+            margin: 0 auto 20px;
             overflow: hidden;
-            border: 5px solid rgba(255,255,255,0.3);
+            border: 4px solid rgba(255,255,255,0.3);
             cursor: pointer;
             position: relative;
             background: rgba(255,255,255,0.1);
@@ -86,7 +87,7 @@
         }
 
         .edit-field:focus {
-            border-color: #667eea;
+            border-color: var(--accent-color);
             background: rgba(102, 126, 234, 0.05);
         }
 
@@ -99,25 +100,51 @@
         }
 
         .section-title {
-            font-size: 18px;
+            position: relative;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+        }
+
+        .section-title-input {
+            font-size: 16px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
+            background: transparent;
+            border: 1px dashed transparent;
+            padding: 4px;
+            border-radius: 4px;
+            outline: none;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .section-title-input:focus {
+            border-color: var(--accent-color);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .section-title-light {
             border-bottom: 2px solid rgba(255,255,255,0.3);
         }
 
+        .section-title-light .section-title-input {
+            color: white;
+        }
+
         .section-title-dark {
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .section-title-dark .section-title-input {
             color: #1f2937;
-            border-bottom-color: #667eea;
         }
 
         .skill-bar {
-            height: 8px;
+            height: 6px;
             background: rgba(255,255,255,0.2);
             border-radius: 10px;
-            margin-top: 8px;
+            margin-top: 6px;
             overflow: hidden;
         }
 
@@ -138,6 +165,8 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             z-index: 1000;
             width: 250px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
         }
 
         .btn {
@@ -153,7 +182,6 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
@@ -172,37 +200,36 @@
         }
 
         .experience-item, .education-item {
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .experience-title {
             font-weight: 600;
-            font-size: 16px;
+            font-size: 15px;
             color: #1f2937;
         }
 
         .experience-company {
-            color: #667eea;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .experience-date {
             color: #6b7280;
-            font-size: 13px;
-            margin-top: 4px;
+            font-size: 12px;
+            margin-top: 3px;
         }
 
         .contact-item {
             display: flex;
             align-items: center;
-            margin-bottom: 16px;
-            font-size: 13px;
+            margin-bottom: 12px;
+            font-size: 12px;
         }
 
         .contact-icon {
-            width: 20px;
-            margin-right: 12px;
+            width: 18px;
+            margin-right: 10px;
             text-align: center;
         }
 
@@ -217,6 +244,9 @@
             .edit-field {
                 border: none;
             }
+            .section-title-input {
+                border: none;
+            }
             .photo-overlay {
                 display: none !important;
             }
@@ -228,8 +258,82 @@
             pointer-events: none;
         }
 
+        .clean-view .section-title-input {
+            border: none !important;
+            background: transparent !important;
+            pointer-events: none;
+        }
+
         .clean-view .photo-overlay {
             display: none !important;
+        }
+
+        .color-picker-section {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .color-picker-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .color-input-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .color-input {
+            width: 60px;
+            height: 40px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .color-input:hover {
+            border-color: #9ca3af;
+            transform: scale(1.05);
+        }
+
+        .color-hex {
+            font-family: monospace;
+            font-size: 11px;
+            color: #6b7280;
+            background: white;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            flex: 1;
+        }
+
+        .color-presets {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .color-preset {
+            width: 100%;
+            height: 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .color-preset:hover {
+            border-color: #374151;
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -240,6 +344,19 @@
         const { useState, useRef } = React;
 
         function ResumeTemplate() {
+            const [accentColor, setAccentColor] = useState('#667eea');
+            const [accentColor2, setAccentColor2] = useState('#764ba2');
+
+            const [sectionTitles, setSectionTitles] = useState({
+                contact: 'Contact',
+                skills: 'Skills',
+                languages: 'Languages',
+                certifications: 'Certifications',
+                profile: 'Profile',
+                experience: 'Experience',
+                education: 'Education'
+            });
+
             const [resumeData, setResumeData] = useState({
                 // Personal Info
                 name: 'John Anderson',
@@ -314,10 +431,35 @@
             const [isCleanView, setIsCleanView] = useState(false);
             const photoInputRef = useRef(null);
 
+            const colorPresets = [
+                '#667eea', '#3B82F6', '#10B981', '#8B5CF6', '#EF4444',
+                '#F59E0B', '#06B6D4', '#EC4899', '#6366F1', '#14B8A6'
+            ];
+
+            const handleSectionTitleChange = (section, value) => {
+                setSectionTitles(prev => ({
+                    ...prev,
+                    [section]: value
+                }));
+            };
+
             const handleInputChange = (field, value) => {
                 setResumeData(prev => ({
                     ...prev,
                     [field]: value
+                }));
+            };
+
+            const handleArrayItemChange = (array, index, field, value) => {
+                const newArray = [...resumeData[array]];
+                if (field) {
+                    newArray[index][field] = value;
+                } else {
+                    newArray[index] = value;
+                }
+                setResumeData(prev => ({
+                    ...prev,
+                    [array]: newArray
                 }));
             };
 
@@ -356,16 +498,42 @@
                                 clonedResume.style.webkitFontSmoothing = 'antialiased';
                                 clonedResume.style.mozOsxFontSmoothing = 'grayscale';
                                 
-                                const inputs = clonedResume.querySelectorAll('input[type="text"], textarea');
+                                const inputs = clonedResume.querySelectorAll('input[type="text"], textarea, input[type="range"]');
                                 inputs.forEach(input => {
-                                    const span = clonedDoc.createElement('span');
-                                    span.textContent = input.value;
-                                    span.style.cssText = window.getComputedStyle(input).cssText;
-                                    span.style.border = 'none';
-                                    span.style.background = 'transparent';
-                                    span.style.whiteSpace = 'pre-wrap';
-                                    span.style.display = 'inline-block';
-                                    input.parentNode.replaceChild(span, input);
+                                    if (input.type === 'range') {
+                                        input.style.display = 'none';
+                                        return;
+                                    }
+                                    
+                                    const isTextarea = input.tagName.toLowerCase() === 'textarea';
+                                    const element = clonedDoc.createElement('div');
+                                    element.textContent = input.value;
+                                    
+                                    // Copy computed styles
+                                    const computedStyle = window.getComputedStyle(input);
+                                    element.style.cssText = computedStyle.cssText;
+                                    
+                                    // Force specific styles for proper rendering
+                                    element.style.border = 'none';
+                                    element.style.background = 'transparent';
+                                    element.style.padding = computedStyle.padding;
+                                    element.style.margin = computedStyle.margin;
+                                    element.style.width = computedStyle.width;
+                                    element.style.height = isTextarea ? computedStyle.height : 'auto';
+                                    element.style.minHeight = computedStyle.minHeight;
+                                    element.style.fontSize = computedStyle.fontSize;
+                                    element.style.fontWeight = computedStyle.fontWeight;
+                                    element.style.fontFamily = computedStyle.fontFamily;
+                                    element.style.color = computedStyle.color;
+                                    element.style.lineHeight = computedStyle.lineHeight;
+                                    element.style.textAlign = computedStyle.textAlign;
+                                    element.style.whiteSpace = isTextarea ? 'pre-wrap' : 'normal';
+                                    element.style.wordBreak = 'break-word';
+                                    element.style.display = computedStyle.display;
+                                    element.style.webkitFontSmoothing = 'antialiased';
+                                    element.style.boxSizing = 'border-box';
+                                    
+                                    input.parentNode.replaceChild(element, input);
                                 });
                             }
                         });
@@ -414,8 +582,6 @@
                         const resume = document.querySelector('.resume-container');
                         const resumeRect = resume.getBoundingClientRect();
                         
-                        console.log(`Capturing at ${resumeRect.width * spec.scale}×${resumeRect.height * spec.scale}px (${spec.scale}x scale)`);
-                        
                         const canvas = await html2canvas(resume, {
                             scale: spec.scale,
                             useCORS: true,
@@ -432,22 +598,45 @@
                                 clonedResume.style.mozOsxFontSmoothing = 'grayscale';
                                 clonedResume.style.textRendering = 'optimizeLegibility';
                                 
-                                const inputs = clonedResume.querySelectorAll('input[type="text"], textarea');
+                                const inputs = clonedResume.querySelectorAll('input[type="text"], textarea, input[type="range"]');
                                 inputs.forEach(input => {
-                                    const span = clonedDoc.createElement('span');
-                                    span.textContent = input.value;
-                                    span.style.cssText = window.getComputedStyle(input).cssText;
-                                    span.style.border = 'none';
-                                    span.style.background = 'transparent';
-                                    span.style.whiteSpace = 'pre-wrap';
-                                    span.style.display = 'inline-block';
-                                    span.style.webkitFontSmoothing = 'antialiased';
-                                    input.parentNode.replaceChild(span, input);
+                                    if (input.type === 'range') {
+                                        input.style.display = 'none';
+                                        return;
+                                    }
+                                    
+                                    const isTextarea = input.tagName.toLowerCase() === 'textarea';
+                                    const element = clonedDoc.createElement('div');
+                                    element.textContent = input.value;
+                                    
+                                    // Copy computed styles
+                                    const computedStyle = window.getComputedStyle(input);
+                                    element.style.cssText = computedStyle.cssText;
+                                    
+                                    // Force specific styles for proper rendering
+                                    element.style.border = 'none';
+                                    element.style.background = 'transparent';
+                                    element.style.padding = computedStyle.padding;
+                                    element.style.margin = computedStyle.margin;
+                                    element.style.width = computedStyle.width;
+                                    element.style.height = isTextarea ? computedStyle.height : 'auto';
+                                    element.style.minHeight = computedStyle.minHeight;
+                                    element.style.fontSize = computedStyle.fontSize;
+                                    element.style.fontWeight = computedStyle.fontWeight;
+                                    element.style.fontFamily = computedStyle.fontFamily;
+                                    element.style.color = computedStyle.color;
+                                    element.style.lineHeight = computedStyle.lineHeight;
+                                    element.style.textAlign = computedStyle.textAlign;
+                                    element.style.whiteSpace = isTextarea ? 'pre-wrap' : 'normal';
+                                    element.style.wordBreak = 'break-word';
+                                    element.style.display = computedStyle.display;
+                                    element.style.webkitFontSmoothing = 'antialiased';
+                                    element.style.boxSizing = 'border-box';
+                                    
+                                    input.parentNode.replaceChild(element, input);
                                 });
                             }
                         });
-
-                        console.log(`Captured canvas: ${canvas.width}×${canvas.height}px`);
 
                         const finalCanvas = document.createElement('canvas');
                         finalCanvas.width = spec.width;
@@ -473,8 +662,6 @@
 
                         ctx.drawImage(canvas, offsetX, offsetY, drawWidth, drawHeight);
 
-                        console.log(`Final export: ${spec.width}×${spec.height}px`);
-
                         const link = document.createElement('a');
                         link.download = `${spec.name}-${Date.now()}.png`;
                         link.href = finalCanvas.toDataURL('image/png', 1.0);
@@ -495,9 +682,55 @@
 
             return (
                 <>
+                    <style>
+                        {`
+                            :root {
+                                --accent-color: ${accentColor};
+                                --accent-color-2: ${accentColor2};
+                            }
+                            .sidebar {
+                                background: linear-gradient(135deg, ${accentColor} 0%, ${accentColor2} 100%);
+                            }
+                            .experience-company {
+                                color: ${accentColor};
+                            }
+                            .btn-primary {
+                                background: linear-gradient(135deg, ${accentColor} 0%, ${accentColor2} 100%);
+                            }
+                        `}
+                    </style>
+
                     <div className="controls-panel">
                         <h3 className="text-lg font-bold mb-4 text-gray-800">Resume Controls</h3>
                         
+                        {/* Color Picker */}
+                        <div className="color-picker-section">
+                            <label className="color-picker-label">
+                                <i className="fas fa-palette mr-1"></i>
+                                Accent Color
+                            </label>
+                            <div className="color-input-wrapper">
+                                <input 
+                                    type="color" 
+                                    className="color-input"
+                                    value={accentColor}
+                                    onChange={(e) => setAccentColor(e.target.value)}
+                                />
+                                <span className="color-hex">{accentColor}</span>
+                            </div>
+                            <div className="color-presets">
+                                {colorPresets.map(color => (
+                                    <div 
+                                        key={color}
+                                        className="color-preset"
+                                        style={{background: color}}
+                                        onClick={() => setAccentColor(color)}
+                                        title={color}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+
                         <button 
                             className="btn btn-primary" 
                             onClick={() => photoInputRef.current.click()}
@@ -595,20 +828,28 @@
                                     <img src={resumeData.photo} alt="Profile" className="profile-photo" />
                                 ) : (
                                     <div style={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
-                                        <i className="fas fa-camera text-4xl mb-2 opacity-50"></i>
+                                        <i className="fas fa-camera text-3xl mb-2 opacity-50"></i>
                                         <span className="text-xs opacity-75">Click to upload</span>
                                     </div>
                                 )}
                                 <div className="photo-overlay">
                                     <div className="text-center">
-                                        <i className="fas fa-camera text-2xl"></i>
-                                        <p className="text-xs mt-2">Change Photo</p>
+                                        <i className="fas fa-camera text-xl"></i>
+                                        <p className="text-xs mt-1">Change Photo</p>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Contact */}
-                            <div className="section-title">Contact</div>
+                            <div className="section-title section-title-light">
+                                <input 
+                                    type="text"
+                                    className="section-title-input"
+                                    value={sectionTitles.contact}
+                                    onChange={(e) => handleSectionTitleChange('contact', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
                             <div className="contact-item">
                                 <i className="fas fa-phone contact-icon"></i>
                                 <input 
@@ -661,14 +902,22 @@
                             </div>
 
                             {/* Skills */}
-                            <div className="section-title mt-8">Skills</div>
+                            <div className="section-title section-title-light" style={{marginTop: '20px'}}>
+                                <input 
+                                    type="text"
+                                    className="section-title-input"
+                                    value={sectionTitles.skills}
+                                    onChange={(e) => handleSectionTitleChange('skills', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
                             {resumeData.skills.map((skill, index) => (
-                                <div key={index} className="mb-4">
-                                    <div className="flex justify-between items-center mb-2">
+                                <div key={index} className="mb-3">
+                                    <div className="flex justify-between items-center mb-1">
                                         <input 
                                             type="text"
                                             className="edit-field edit-field-light"
-                                            style={{flex: 1, marginRight: '8px'}}
+                                            style={{flex: 1, marginRight: '8px', fontSize: '12px'}}
                                             value={skill.name}
                                             onChange={(e) => handleSkillChange(index, 'name', e.target.value)}
                                             disabled={isCleanView}
@@ -685,18 +934,33 @@
                                             max="100"
                                             value={skill.level}
                                             onChange={(e) => handleSkillChange(index, 'level', e.target.value)}
-                                            style={{width: '100%', marginTop: '8px', cursor: 'pointer'}}
+                                            style={{width: '100%', marginTop: '6px', cursor: 'pointer'}}
                                         />
                                     )}
                                 </div>
                             ))}
 
                             {/* Languages */}
-                            <div className="section-title mt-8">Languages</div>
+                            <div className="section-title section-title-light" style={{marginTop: '20px'}}>
+                                <input 
+                                    type="text"
+                                    className="section-title-input"
+                                    value={sectionTitles.languages}
+                                    onChange={(e) => handleSectionTitleChange('languages', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
                             {resumeData.languages.map((lang, index) => (
-                                <div key={index} className="mb-3">
-                                    <div className="flex justify-between items-center">
-                                        <span>{lang.name}</span>
+                                <div key={index} className="mb-2">
+                                    <div className="flex justify-between items-center text-sm">
+                                        <input 
+                                            type="text"
+                                            className="edit-field edit-field-light"
+                                            style={{width: 'auto', minWidth: '80px', fontSize: '12px'}}
+                                            value={lang.name}
+                                            onChange={(e) => handleArrayItemChange('languages', index, 'name', e.target.value)}
+                                            disabled={isCleanView}
+                                        />
                                         <span className="text-xs opacity-75">
                                             {lang.level === 100 ? 'Native' : lang.level > 70 ? 'Fluent' : 'Intermediate'}
                                         </span>
@@ -705,11 +969,26 @@
                             ))}
 
                             {/* Certifications */}
-                            <div className="section-title mt-8">Certifications</div>
+                            <div className="section-title section-title-light" style={{marginTop: '20px'}}>
+                                <input 
+                                    type="text"
+                                    className="section-title-input"
+                                    value={sectionTitles.certifications}
+                                    onChange={(e) => handleSectionTitleChange('certifications', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
                             {resumeData.certifications.map((cert, index) => (
-                                <div key={index} className="mb-2 text-sm">
+                                <div key={index} className="mb-2 text-xs">
                                     <i className="fas fa-certificate mr-2 text-xs"></i>
-                                    {cert}
+                                    <input 
+                                        type="text"
+                                        className="edit-field edit-field-light"
+                                        style={{display: 'inline', width: 'calc(100% - 30px)', fontSize: '12px'}}
+                                        value={cert}
+                                        onChange={(e) => handleArrayItemChange('certifications', index, null, e.target.value)}
+                                        disabled={isCleanView}
+                                    />
                                 </div>
                             ))}
                         </div>
@@ -717,11 +996,11 @@
                         {/* Main Content */}
                         <div className="main-content">
                             {/* Name & Title */}
-                            <div style={{marginBottom: '30px'}}>
+                            <div style={{marginBottom: '24px'}}>
                                 <input 
                                     type="text"
                                     className="edit-field edit-field-dark"
-                                    style={{fontSize: '36px', fontWeight: '800', marginBottom: '8px'}}
+                                    style={{fontSize: '32px', fontWeight: '800', marginBottom: '6px'}}
                                     value={resumeData.name}
                                     onChange={(e) => handleInputChange('name', e.target.value)}
                                     disabled={isCleanView}
@@ -729,7 +1008,7 @@
                                 <input 
                                     type="text"
                                     className="edit-field edit-field-dark"
-                                    style={{fontSize: '18px', color: '#667eea', fontWeight: '500'}}
+                                    style={{fontSize: '16px', fontWeight: '500'}}
                                     value={resumeData.title}
                                     onChange={(e) => handleInputChange('title', e.target.value)}
                                     disabled={isCleanView}
@@ -737,38 +1016,106 @@
                             </div>
 
                             {/* Profile */}
-                            <div className="section-title section-title-dark">Profile</div>
+                            <div className="section-title section-title-dark">
+                                <input 
+                                    type="text"
+                                    className="section-title-input"
+                                    value={sectionTitles.profile}
+                                    onChange={(e) => handleSectionTitleChange('profile', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
                             <textarea 
                                 className="edit-field edit-field-dark"
-                                style={{fontSize: '14px', lineHeight: '1.6', minHeight: '80px', color: '#4b5563'}}
+                                style={{fontSize: '12px', lineHeight: '1.5', minHeight: '65px', color: '#4b5563', marginBottom: '20px'}}
                                 value={resumeData.profile}
                                 onChange={(e) => handleInputChange('profile', e.target.value)}
                                 disabled={isCleanView}
                             />
 
                             {/* Experience */}
-                            <div className="section-title section-title-dark" style={{marginTop: '32px'}}>Experience</div>
+                            <div className="section-title section-title-dark">
+                                <input 
+                                    type="text"
+                                    className="section-title-input"
+                                    value={sectionTitles.experience}
+                                    onChange={(e) => handleSectionTitleChange('experience', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
                             {resumeData.experience.map((exp, index) => (
                                 <div key={index} className="experience-item">
-                                    <div className="experience-title">{exp.title}</div>
-                                    <div className="experience-company">{exp.company}</div>
-                                    <div className="experience-date">{exp.date}</div>
-                                    <p style={{fontSize: '13px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5'}}>
-                                        {exp.description}
-                                    </p>
+                                    <input 
+                                        type="text"
+                                        className="edit-field experience-title"
+                                        value={exp.title}
+                                        onChange={(e) => handleArrayItemChange('experience', index, 'title', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                    <input 
+                                        type="text"
+                                        className="edit-field experience-company"
+                                        value={exp.company}
+                                        onChange={(e) => handleArrayItemChange('experience', index, 'company', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                    <input 
+                                        type="text"
+                                        className="edit-field experience-date"
+                                        value={exp.date}
+                                        onChange={(e) => handleArrayItemChange('experience', index, 'date', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                    <textarea 
+                                        className="edit-field"
+                                        style={{fontSize: '12px', color: '#6b7280', marginTop: '6px', lineHeight: '1.4', minHeight: '40px'}}
+                                        value={exp.description}
+                                        onChange={(e) => handleArrayItemChange('experience', index, 'description', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
                                 </div>
                             ))}
 
                             {/* Education */}
-                            <div className="section-title section-title-dark" style={{marginTop: '32px'}}>Education</div>
+                            <div className="section-title section-title-dark" style={{marginTop: '20px'}}>
+                                <input 
+                                    type="text"
+                                    className="section-title-input"
+                                    value={sectionTitles.education}
+                                    onChange={(e) => handleSectionTitleChange('education', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
                             {resumeData.education.map((edu, index) => (
                                 <div key={index} className="education-item">
-                                    <div className="experience-title">{edu.degree}</div>
-                                    <div className="experience-company">{edu.school}</div>
-                                    <div className="experience-date">{edu.date}</div>
-                                    <p style={{fontSize: '13px', color: '#6b7280', marginTop: '8px'}}>
-                                        {edu.details}
-                                    </p>
+                                    <input 
+                                        type="text"
+                                        className="edit-field experience-title"
+                                        value={edu.degree}
+                                        onChange={(e) => handleArrayItemChange('education', index, 'degree', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                    <input 
+                                        type="text"
+                                        className="edit-field experience-company"
+                                        value={edu.school}
+                                        onChange={(e) => handleArrayItemChange('education', index, 'school', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                    <input 
+                                        type="text"
+                                        className="edit-field experience-date"
+                                        value={edu.date}
+                                        onChange={(e) => handleArrayItemChange('education', index, 'date', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                    <textarea 
+                                        className="edit-field"
+                                        style={{fontSize: '12px', color: '#6b7280', marginTop: '6px', minHeight: '30px'}}
+                                        value={edu.details}
+                                        onChange={(e) => handleArrayItemChange('education', index, 'details', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
                                 </div>
                             ))}
                         </div>
