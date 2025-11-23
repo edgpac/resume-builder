@@ -351,7 +351,6 @@
                 contact: 'Contact',
                 skills: 'Skills',
                 languages: 'Languages',
-                certifications: 'Certifications',
                 profile: 'Profile',
                 experience: 'Experience',
                 education: 'Education'
@@ -420,12 +419,6 @@
                     }
                 ],
                 
-                // Certifications
-                certifications: [
-                    'AWS Certified Solutions Architect',
-                    'Google Cloud Professional',
-                    'Certified Scrum Master'
-                ]
             });
 
             const [isCleanView, setIsCleanView] = useState(false);
@@ -968,29 +961,6 @@
                                 </div>
                             ))}
 
-                            {/* Certifications */}
-                            <div className="section-title section-title-light" style={{marginTop: '20px'}}>
-                                <input 
-                                    type="text"
-                                    className="section-title-input"
-                                    value={sectionTitles.certifications}
-                                    onChange={(e) => handleSectionTitleChange('certifications', e.target.value)}
-                                    disabled={isCleanView}
-                                />
-                            </div>
-                            {resumeData.certifications.map((cert, index) => (
-                                <div key={index} className="mb-2 text-xs">
-                                    <i className="fas fa-certificate mr-2 text-xs"></i>
-                                    <input 
-                                        type="text"
-                                        className="edit-field edit-field-light"
-                                        style={{display: 'inline', width: 'calc(100% - 30px)', fontSize: '12px'}}
-                                        value={cert}
-                                        onChange={(e) => handleArrayItemChange('certifications', index, null, e.target.value)}
-                                        disabled={isCleanView}
-                                    />
-                                </div>
-                            ))}
                         </div>
 
                         {/* Main Content */}
