@@ -13,10 +13,7 @@
     },
     {
       "src": "/template(\\d+).html",
-      "dest": "/template$1.html"
+      "dest": "/templates$1.html"
     }
-  ],
-  "env": {
-    "GROQ_API_KEY": "@groq_api_key"
-  }
+  ]
 }
