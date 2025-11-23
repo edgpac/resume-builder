@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Professional Resume Template</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f0f0;
+        }
+
+        .resume-container {
+            background: white;
+            width: 8.5in;
+            min-height: 11in;
+            margin: 20px auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+            display: flex;
+            border-radius: 0;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 40%;
+            background: #1a1a1a;
+            color: white;
+            padding: 0;
+            position: relative;
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            padding: 40px 30px;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            min-height: 200px;
+        }
+
+        .main-content {
+            width: 60%;
+            padding: 40px;
+            background: white;
+        }
+
+        .profile-photo-section {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            border: 5px solid white;
+            cursor: pointer;
+            position: relative;
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .profile-photo-section:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        .name-section {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .name-input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 40px;
+            font-weight: 900;
+            text-align: center;
+            width: 100%;
+            outline: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .title-input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            width: 100%;
+            outline: none;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-content {
+            padding: 30px;
+        }
+
+        .edit-field {
+            border: 1px dashed transparent;
+            padding: 4px;
+            border-radius: 4px;
+            background: transparent;
+            width: 100%;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .edit-field:focus {
+            border-color: #FF6B35;
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #FF6B35;
+        }
+
+        .section-title-light {
+            color: white;
+        }
+
+        .section-title-dark {
+            color: #1a1a1a;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+            font-size: 13px;
+        }
+
+        .info-icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(255,107,53,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: #FF6B35;
+            flex-shrink: 0;
+        }
+
+        .skill-bar-container {
+            margin-bottom: 16px;
+        }
+
+        .skill-name {
+            font-size: 13px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FF6B35 0%, #F7931E 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .experience-item {
+            margin-bottom: 28px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .experience-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            background: #FF6B35;
+            border-radius: 50%;
+        }
+
+        .experience-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .experience-company {
+            color: #FF6B35;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .experience-date {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .experience-description {
+            font-size: 13px;
+            color: #4a4a4a;
+            line-height: 1.6;
+        }
+
+        .controls-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            width: 250px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+        }
+
+        @media print {
+            .controls-panel { display: none; }
+            .resume-container { box-shadow: none; margin: 0; }
+            .edit-field { border: none; }
+            .photo-overlay { display: none !important; }
+        }
+
+        .clean-view .edit-field {
+            border: none !important;
+            background: transparent !important;
+            pointer-events: none;
+        }
+
+        .clean-view .photo-overlay {
+            display: none !important;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .achievement-icon {
+            color: #FF6B35;
+            margin-right: 10px;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useRef } = React;
+
+        function ResumeTemplate() {
+            const [resumeData, setResumeData] = useState({
+                name: 'Ricardo López',
+                title: 'Fotógrafo',
+                photo: null,
+                
+                contact: {
+                    phone: '(55) 1234-5678',
+                    email: 'hola@ricloeb.com',
+                    location: 'Calle Cuba #123, Cualquier Lugar',
+                    website: 'www.sitioincreible.com'
+                },
+                
+                summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nist ut aliquip ex ea commodo consequat.',
+                
+                skills: [
+                    { name: 'Photoshop', level: 90 },
+                    { name: 'Software 1', level: 85 },
+                    { name: 'Software 2', level: 75 }
+                ],
+                
+                languages: [
+                    { name: 'Idioma 1', level: 'Nativo' },
+                    { name: 'Idioma 2', level: 'Avanzado' }
+                ],
+                
+                achievements: [
+                    'FOCO HACIA LOS RESULTADOS',
+                    'INNOVACIÓN Y EMPRENDIMIENTO SOCIAL 2022',
+                    'CERTIFICACIÓN DE MEJORA CONTINUA EN PROCESOS ADMINISTRATIVOS POR EL INSTITUTO FAUGET DE RELACIONES'
+                ],
+                
+                experience: [
+                    {
+                        title: 'Fotógrafo Freelance',
+                        company: 'Contratos Junior',
+                        date: 'Julio 2023 - Actual',
+                        description: 'SERVICIOS EN EVENTOS SOCIALES. EDICIÓN DE FOTOGRAFÍAS. COORDINACIÓN CREATIVA DE PROYECTOS. EDICIÓN DE FOTOGRAFÍA. COORDINACIÓN DE EVENTOS DE ALTO ALCANCE.'
+                    },
+                    {
+                        title: 'Fotógrafo Senior',
+                        company: 'Agencia Vandiere',
+                        date: 'Enero 2021 - Julio 2023',
+                        description: 'SERVICIOS EN EVENTOS SOCIALES. EDICIÓN DE FOTOGRAFÍAS. COORDINACIÓN CREATIVA DE PROYECTOS. EDICIÓN DE FOTOGRAFÍA. COORDINACIÓN DE EVENTOS DE ALTO ALCANCE AUXILIAN EN EVENTOS DE ALTO ALCANCE.'
+                    },
+                    {
+                        title: 'Fotógrafo Junior',
+                        company: 'Agencia Borcelle',
+                        date: 'Julio 2019 - Enero 2021',
+                        description: 'FOTOGRAFÍA EN EVENTOS SOCIALES. EDICIÓN DE FOTOGRAFÍAS. COORDINACIÓN CREATIVA DE PROYECTOS. EDICIÓN DE FOTOGRAFÍA. COORDINACIÓN DE EVENTOS DE ALTO ALCANCE AUXILIAR EN EVENTOS DE ALTO ALCANCE.'
+                    }
+                ],
+                
+                education: [
+                    {
+                        degree: 'Universidad La Sierra',
+                        field: 'Bachiller en Mayo 2020',
+                        details: 'LICENCIADO EN COMUNICACIÓN GRÁFICA. ÉNFASIS EN VISUALES'
+                    },
+                    {
+                        degree: 'Escuela de Fotografía',
+                        field: 'Certificado en Diciembre 2020',
+                        details: 'GESTIÓN DE PORTAFOLIO Y EDICIÓN. DIRECCIÓN ARTÍSTICA'
+                    }
+                ]
+            });
+
+            const [isCleanView, setIsCleanView] = useState(false);
+            const photoInputRef = useRef(null);
+
+            const handleInputChange = (section, field, value) => {
+                if (section) {
+                    setResumeData(prev => ({
+                        ...prev,
+                        [section]: {
+                            ...prev[section],
+                            [field]: value
+                        }
+                    }));
+                } else {
+                    setResumeData(prev => ({
+                        ...prev,
+                        [field]: value
+                    }));
+                }
+            };
+
+            const handlePhotoUpload = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        setResumeData(prev => ({
+                            ...prev,
+                            photo: e.target.result
+                        }));
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            const downloadAsImage = async () => {
+                setIsCleanView(true);
+                setTimeout(async () => {
+                    try {
+                        const resume = document.querySelector('.resume-container');
+                        const canvas = await html2canvas(resume, {
+                            scale: 2,
+                            useCORS: true,
+                            backgroundColor: '#ffffff'
+                        });
+                        const link = document.createElement('a');
+                        link.download = 'modern-resume.png';
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        setIsCleanView(false);
+                    } catch (error) {
+                        console.error('Export failed:', error);
+                        alert('Export failed. Please try Print to PDF instead.');
+                        setIsCleanView(false);
+                    }
+                }, 300);
+            };
+
+            const handlePrint = () => {
+                window.print();
+            };
+
+            return (
+                <>
+                    <div className="controls-panel">
+                        <h3 className="text-lg font-bold mb-4 text-gray-800">Resume Controls</h3>
+                        
+                        <button 
+                            className="btn btn-primary" 
+                            onClick={() => photoInputRef.current.click()}
+                        >
+                            <i className="fas fa-camera mr-2"></i>
+                            Upload Photo
+                        </button>
+                        <input 
+                            type="file" 
+                            ref={photoInputRef}
+                            style={{display: 'none'}}
+                            accept="image/*"
+                            onChange={handlePhotoUpload}
+                        />
+
+                        <button className="btn btn-primary" onClick={handlePrint}>
+                            <i className="fas fa-print mr-2"></i>
+                            Print / Save PDF
+                        </button>
+
+                        <button className="btn" style={{background: '#10b981', color: 'white'}} onClick={downloadAsImage}>
+                            <i className="fas fa-image mr-2"></i>
+                            Download as PNG
+                        </button>
+
+                        <button 
+                            className="btn" 
+                            style={{background: '#3b82f6', color: 'white'}}
+                            onClick={() => setIsCleanView(!isCleanView)}
+                        >
+                            <i className={`fas ${isCleanView ? 'fa-edit' : 'fa-eye'} mr-2`}></i>
+                            {isCleanView ? 'Show Editor' : 'Preview'}
+                        </button>
+
+                        <button 
+                            className="btn" 
+                            style={{background: '#ef4444', color: 'white', marginTop: '20px'}}
+                            onClick={() => window.location.href = 'index.html'}
+                        >
+                            <i className="fas fa-arrow-left mr-2"></i>
+                            Back to Templates
+                        </button>
+                    </div>
+
+                    <div className={`resume-container ${isCleanView ? 'clean-view' : ''}`}>
+                        {/* Sidebar */}
+                        <div className="sidebar">
+                            <div className="sidebar-header">
+                                {/* Photo */}
+                                <div 
+                                    className="profile-photo-section"
+                                    onClick={() => !isCleanView && photoInputRef.current.click()}
+                                >
+                                    {resumeData.photo ? (
+                                        <img src={resumeData.photo} alt="Profile" className="profile-photo" />
+                                    ) : (
+                                        <div style={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+                                            <i className="fas fa-user text-5xl mb-2 opacity-50"></i>
+                                            <span className="text-xs opacity-75">Upload</span>
+                                        </div>
+                                    )}
+                                    <div className="photo-overlay">
+                                        <div className="text-center">
+                                            <i className="fas fa-camera text-3xl"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Name */}
+                                <div className="name-section">
+                                    <input 
+                                        type="text"
+                                        className="name-input"
+                                        value={resumeData.name}
+                                        onChange={(e) => handleInputChange(null, 'name', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                    <input 
+                                        type="text"
+                                        className="title-input"
+                                        value={resumeData.title}
+                                        onChange={(e) => handleInputChange(null, 'title', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="sidebar-content">
+                                {/* Education */}
+                                <div className="section-title section-title-light">Educación</div>
+                                {resumeData.education.map((edu, index) => (
+                                    <div key={index} style={{marginBottom: '20px'}}>
+                                        <div style={{fontWeight: '700', fontSize: '14px', marginBottom: '4px'}}>{edu.degree}</div>
+                                        <div style={{fontSize: '13px', opacity: '0.9', marginBottom: '6px'}}>{edu.field}</div>
+                                        <div style={{fontSize: '12px', opacity: '0.8', lineHeight: '1.4'}}>{edu.details}</div>
+                                    </div>
+                                ))}
+
+                                {/* Skills */}
+                                <div className="section-title section-title-light" style={{marginTop: '30px'}}>Habilidades</div>
+                                {resumeData.skills.map((skill, index) => (
+                                    <div key={index} className="skill-bar-container">
+                                        <div className="skill-name">
+                                            <span>{skill.name}</span>
+                                            <span>{skill.level}%</span>
+                                        </div>
+                                        <div className="progress-bar">
+                                            <div className="progress-fill" style={{width: `${skill.level}%`}}></div>
+                                        </div>
+                                    </div>
+                                ))}
+
+                                {/* Languages */}
+                                <div className="section-title section-title-light" style={{marginTop: '30px'}}>Idiomas</div>
+                                {resumeData.languages.map((lang, index) => (
+                                    <div key={index} style={{marginBottom: '10px', fontSize: '13px'}}>
+                                        <span style={{fontWeight: '600'}}>{lang.name}</span>
+                                        <span style={{opacity: '0.8', marginLeft: '10px'}}>{lang.level}</span>
+                                    </div>
+                                ))}
+
+                                {/* Achievements */}
+                                <div className="section-title section-title-light" style={{marginTop: '30px'}}>Logros</div>
+                                {resumeData.achievements.map((achievement, index) => (
+                                    <div key={index} className="achievement-item">
+                                        <i className="fas fa-trophy achievement-icon"></i>
+                                        <span>{achievement}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Main Content */}
+                        <div className="main-content">
+                            {/* Contact Info */}
+                            <div style={{marginBottom: '30px'}}>
+                                <div className="info-row">
+                                    <div className="info-icon">
+                                        <i className="fas fa-phone"></i>
+                                    </div>
+                                    <input 
+                                        type="text"
+                                        className="edit-field"
+                                        style={{color: '#1a1a1a', fontSize: '13px'}}
+                                        value={resumeData.contact.phone}
+                                        onChange={(e) => handleInputChange('contact', 'phone', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                </div>
+                                <div className="info-row">
+                                    <div className="info-icon">
+                                        <i className="fas fa-envelope"></i>
+                                    </div>
+                                    <input 
+                                        type="text"
+                                        className="edit-field"
+                                        style={{color: '#1a1a1a', fontSize: '13px'}}
+                                        value={resumeData.contact.email}
+                                        onChange={(e) => handleInputChange('contact', 'email', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                </div>
+                                <div className="info-row">
+                                    <div className="info-icon">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <input 
+                                        type="text"
+                                        className="edit-field"
+                                        style={{color: '#1a1a1a', fontSize: '13px'}}
+                                        value={resumeData.contact.location}
+                                        onChange={(e) => handleInputChange('contact', 'location', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                </div>
+                                <div className="info-row">
+                                    <div className="info-icon">
+                                        <i className="fas fa-globe"></i>
+                                    </div>
+                                    <input 
+                                        type="text"
+                                        className="edit-field"
+                                        style={{color: '#1a1a1a', fontSize: '13px'}}
+                                        value={resumeData.contact.website}
+                                        onChange={(e) => handleInputChange('contact', 'website', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Summary */}
+                            <div className="section-title section-title-dark">Perfil</div>
+                            <textarea 
+                                className="edit-field"
+                                style={{fontSize: '13px', lineHeight: '1.6', minHeight: '90px', color: '#4a4a4a', marginBottom: '30px'}}
+                                value={resumeData.summary}
+                                onChange={(e) => handleInputChange(null, 'summary', e.target.value)}
+                                disabled={isCleanView}
+                            />
+
+                            {/* Experience */}
+                            <div className="section-title section-title-dark">Experiencia Laboral</div>
+                            {resumeData.experience.map((exp, index) => (
+                                <div key={index} className="experience-item">
+                                    <div className="experience-title">{exp.title}</div>
+                                    <div className="experience-company">{exp.company}</div>
+                                    <div className="experience-date">{exp.date}</div>
+                                    <div className="experience-description">{exp.description}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        ReactDOM.render(<ResumeTemplate />, document.getElementById('root'));
+    </script>
+</body>
+</html>

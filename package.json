@@ -1,0 +1,23 @@
+{
+  "name": "professional-resume-builder",
+  "version": "1.0.0",
+  "description": "Modern resume builder with 5 professional templates and AI-powered content enhancement",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "resume",
+    "cv",
+    "builder",
+    "templates",
+    "professional",
+    "job-application"
+  ],
+  "author": "Edtik",
+  "license": "MIT",
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  }
+}

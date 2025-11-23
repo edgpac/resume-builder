@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bold Impact Resume Template</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f0f0;
+        }
+
+        .resume-container {
+            background: white;
+            width: 8.5in;
+            min-height: 11in;
+            margin: 20px auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+            display: flex;
+            border-radius: 0;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 30%;
+            background: #1E3A2E;
+            color: white;
+            padding: 40px 25px;
+        }
+
+        .main-content {
+            width: 70%;
+            padding: 40px 35px;
+            background: #F5F5F5;
+        }
+
+        .profile-photo-section {
+            width: 150px;
+            height: 150px;
+            border-radius: 12px;
+            margin: 0 auto 25px;
+            overflow: hidden;
+            border: 3px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            position: relative;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .profile-photo-section:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        .name-section {
+            text-align: right;
+            margin-bottom: 35px;
+            padding: 25px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .name-input {
+            background: transparent;
+            border: none;
+            color: #1E3A2E;
+            font-size: 32px;
+            font-weight: 800;
+            text-align: right;
+            width: 100%;
+            outline: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .title-input {
+            background: transparent;
+            border: none;
+            color: #666;
+            font-size: 14px;
+            text-align: right;
+            width: 100%;
+            outline: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .edit-field {
+            border: 1px dashed transparent;
+            padding: 4px;
+            border-radius: 4px;
+            background: transparent;
+            width: 100%;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .edit-field:focus {
+            border-color: #4A7C59;
+            background: rgba(74, 124, 89, 0.05);
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title-light {
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .section-title-dark {
+            color: #1E3A2E;
+            border-bottom: 2px solid #1E3A2E;
+        }
+
+        .section-icon {
+            width: 28px;
+            height: 28px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .section-icon-dark {
+            background: #1E3A2E;
+            color: white;
+        }
+
+        .info-block {
+            margin-bottom: 16px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .info-label {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .info-icon {
+            width: 18px;
+            text-align: center;
+        }
+
+        .skill-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .skill-item {
+            background: rgba(255,255,255,0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-bullet {
+            width: 6px;
+            height: 6px;
+            background: #4A7C59;
+            border-radius: 50%;
+        }
+
+        .experience-card {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            position: relative;
+            border-left: 4px solid #1E3A2E;
+        }
+
+        .experience-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1E3A2E;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .experience-company {
+            color: #4A7C59;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .experience-date {
+            color: #888;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .experience-description {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .controls-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            width: 250px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1E3A2E 0%, #2C5F45 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 58, 46, 0.4);
+        }
+
+        @media print {
+            .controls-panel { display: none; }
+            .resume-container { box-shadow: none; margin: 0; }
+            .edit-field { border: none; }
+            .photo-overlay { display: none !important; }
+        }
+
+        .clean-view .edit-field {
+            border: none !important;
+            background: transparent !important;
+            pointer-events: none;
+        }
+
+        .clean-view .photo-overlay {
+            display: none !important;
+        }
+
+        .knowledge-item {
+            background: rgba(255,255,255,0.08);
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .update-badge {
+            background: #4A7C59;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 11px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useRef } = React;
+
+        function ResumeTemplate() {
+            const [resumeData, setResumeData] = useState({
+                name: 'Ricardo Soto',
+                title: 'Contador',
+                photo: null,
+                
+                personalInfo: {
+                    age: '25 años',
+                    nationality: 'Nacionalidad Mexicana',
+                    birthDate: '15 de Diciembre de 1999'
+                },
+                
+                contact: {
+                    phone: '(555) 123-5678',
+                    email: 'hola@ricardosoto.com',
+                    location: 'Calle Cuba #123, Cualquier Lugar',
+                    facebook: 'facebook.com/ricardosoto'
+                },
+                
+                profile: 'Estudiante de 7º semestre de la carrera de contaduría, con conocimientos básicos en costos, finanzas, contabilidad general, entre otros. Con disposición por seguir aprendiendo y trabajar.',
+                
+                education: [
+                    {
+                        degree: 'Licenciatura en Contaduría',
+                        school: 'Universidad Nacional Autónoma',
+                        date: '(2019 - actualmente)',
+                        details: ''
+                    }
+                ],
+                
+                experience: [
+                    {
+                        title: 'Empresa 1 (2018)',
+                        company: 'Ayudante General',
+                        date: '2018',
+                        description: 'Atención al cliente. Trabajo bajo presión. Resolución de problemas.'
+                    },
+                    {
+                        title: 'Empresa 2 (2017)',
+                        company: 'Ayudante General',
+                        date: '2017',
+                        description: 'Atención al cliente, trabajo bajo presión, resolución de problemas.'
+                    }
+                ],
+                
+                skills: [
+                    'Pro activo',
+                    'Capacidad de trabajo en equipo',
+                    'Mente abierta',
+                    'Resolución de problemas',
+                    'Capacidad de adaptación'
+                ],
+                
+                knowledge: [
+                    'Finanzas',
+                    'Gestión (básico/neto)',
+                    'Normatividad'
+                ],
+                
+                languages: [
+                    { name: 'Inglés', level: 'Principiante A2' },
+                    { name: 'Francés', level: 'Principiante A2' }
+                ],
+                
+                updates: '¿Cómo iniciar mis inversiones en la bolsa? 2022'
+            });
+
+            const [isCleanView, setIsCleanView] = useState(false);
+            const photoInputRef = useRef(null);
+
+            const handleInputChange = (section, field, value) => {
+                if (section) {
+                    setResumeData(prev => ({
+                        ...prev,
+                        [section]: {
+                            ...prev[section],
+                            [field]: value
+                        }
+                    }));
+                } else {
+                    setResumeData(prev => ({
+                        ...prev,
+                        [field]: value
+                    }));
+                }
+            };
+
+            const handlePhotoUpload = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        setResumeData(prev => ({
+                            ...prev,
+                            photo: e.target.result
+                        }));
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            const downloadAsImage = async () => {
+                setIsCleanView(true);
+                setTimeout(async () => {
+                    try {
+                        const resume = document.querySelector('.resume-container');
+                        const canvas = await html2canvas(resume, {
+                            scale: 2,
+                            useCORS: true,
+                            backgroundColor: '#ffffff'
+                        });
+                        const link = document.createElement('a');
+                        link.download = 'bold-resume.png';
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        setIsCleanView(false);
+                    } catch (error) {
+                        console.error('Export failed:', error);
+                        alert('Export failed. Please try Print to PDF instead.');
+                        setIsCleanView(false);
+                    }
+                }, 300);
+            };
+
+            const handlePrint = () => {
+                window.print();
+            };
+
+            return (
+                <>
+                    <div className="controls-panel">
+                        <h3 className="text-lg font-bold mb-4 text-gray-800">Resume Controls</h3>
+                        
+                        <button 
+                            className="btn btn-primary" 
+                            onClick={() => photoInputRef.current.click()}
+                        >
+                            <i className="fas fa-camera mr-2"></i>
+                            Upload Photo
+                        </button>
+                        <input 
+                            type="file" 
+                            ref={photoInputRef}
+                            style={{display: 'none'}}
+                            accept="image/*"
+                            onChange={handlePhotoUpload}
+                        />
+
+                        <button className="btn btn-primary" onClick={handlePrint}>
+                            <i className="fas fa-print mr-2"></i>
+                            Print / Save PDF
+                        </button>
+
+                        <button className="btn" style={{background: '#10b981', color: 'white'}} onClick={downloadAsImage}>
+                            <i className="fas fa-image mr-2"></i>
+                            Download as PNG
+                        </button>
+
+                        <button 
+                            className="btn" 
+                            style={{background: '#3b82f6', color: 'white'}}
+                            onClick={() => setIsCleanView(!isCleanView)}
+                        >
+                            <i className={`fas ${isCleanView ? 'fa-edit' : 'fa-eye'} mr-2`}></i>
+                            {isCleanView ? 'Show Editor' : 'Preview'}
+                        </button>
+
+                        <button 
+                            className="btn" 
+                            style={{background: '#ef4444', color: 'white', marginTop: '20px'}}
+                            onClick={() => window.location.href = 'index.html'}
+                        >
+                            <i className="fas fa-arrow-left mr-2"></i>
+                            Back to Templates
+                        </button>
+                    </div>
+
+                    <div className={`resume-container ${isCleanView ? 'clean-view' : ''}`}>
+                        {/* Sidebar */}
+                        <div className="sidebar">
+                            {/* Photo */}
+                            <div 
+                                className="profile-photo-section"
+                                onClick={() => !isCleanView && photoInputRef.current.click()}
+                            >
+                                {resumeData.photo ? (
+                                    <img src={resumeData.photo} alt="Profile" className="profile-photo" />
+                                ) : (
+                                    <div style={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+                                        <i className="fas fa-user text-4xl mb-2 opacity-50"></i>
+                                        <span className="text-xs opacity-75">Upload Photo</span>
+                                    </div>
+                                )}
+                                <div className="photo-overlay">
+                                    <div className="text-center text-white">
+                                        <i className="fas fa-camera text-2xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Personal Info */}
+                            <div className="section-title section-title-light">
+                                <div className="section-icon">
+                                    <i className="fas fa-user"></i>
+                                </div>
+                                Perfil Personal
+                            </div>
+                            <div className="info-block">
+                                <div className="info-label">
+                                    <i className="fas fa-birthday-cake info-icon"></i>
+                                    {resumeData.personalInfo.age}
+                                </div>
+                                <div className="info-label">
+                                    <i className="fas fa-flag info-icon"></i>
+                                    {resumeData.personalInfo.nationality}
+                                </div>
+                                <div className="info-label">
+                                    <i className="fas fa-calendar info-icon"></i>
+                                    {resumeData.personalInfo.birthDate}
+                                </div>
+                            </div>
+
+                            {/* Contact */}
+                            <div className="section-title section-title-light" style={{marginTop: '25px'}}>
+                                <div className="section-icon">
+                                    <i className="fas fa-address-book"></i>
+                                </div>
+                                Contacto
+                            </div>
+                            <div className="info-block">
+                                <div className="info-label">
+                                    <i className="fas fa-phone info-icon"></i>
+                                    <input 
+                                        type="text"
+                                        className="edit-field"
+                                        style={{color: 'white', fontSize: '12px', flex: 1}}
+                                        value={resumeData.contact.phone}
+                                        onChange={(e) => handleInputChange('contact', 'phone', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                </div>
+                                <div className="info-label">
+                                    <i className="fas fa-envelope info-icon"></i>
+                                    <input 
+                                        type="text"
+                                        className="edit-field"
+                                        style={{color: 'white', fontSize: '12px', flex: 1}}
+                                        value={resumeData.contact.email}
+                                        onChange={(e) => handleInputChange('contact', 'email', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                </div>
+                                <div className="info-label">
+                                    <i className="fas fa-map-marker-alt info-icon"></i>
+                                    <input 
+                                        type="text"
+                                        className="edit-field"
+                                        style={{color: 'white', fontSize: '12px', flex: 1}}
+                                        value={resumeData.contact.location}
+                                        onChange={(e) => handleInputChange('contact', 'location', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                </div>
+                                <div className="info-label">
+                                    <i className="fab fa-facebook info-icon"></i>
+                                    <input 
+                                        type="text"
+                                        className="edit-field"
+                                        style={{color: 'white', fontSize: '12px', flex: 1}}
+                                        value={resumeData.contact.facebook}
+                                        onChange={(e) => handleInputChange('contact', 'facebook', e.target.value)}
+                                        disabled={isCleanView}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Knowledge */}
+                            <div className="section-title section-title-light" style={{marginTop: '25px'}}>
+                                <div className="section-icon">
+                                    <i className="fas fa-laptop-code"></i>
+                                </div>
+                                Conocimientos
+                            </div>
+                            {resumeData.knowledge.map((item, index) => (
+                                <div key={index} className="knowledge-item">
+                                    <i className="fas fa-circle" style={{fontSize: '6px'}}></i>
+                                    {item}
+                                </div>
+                            ))}
+
+                            {/* Habilidades */}
+                            <div className="section-title section-title-light" style={{marginTop: '25px'}}>
+                                <div className="section-icon">
+                                    <i className="fas fa-star"></i>
+                                </div>
+                                Habilidades
+                            </div>
+                            <div className="skill-grid">
+                                {resumeData.skills.map((skill, index) => (
+                                    <div key={index} className="skill-item">
+                                        <div className="skill-bullet"></div>
+                                        {skill}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Languages */}
+                            <div className="section-title section-title-light" style={{marginTop: '25px'}}>
+                                <div className="section-icon">
+                                    <i className="fas fa-globe"></i>
+                                </div>
+                                Idiomas
+                            </div>
+                            {resumeData.languages.map((lang, index) => (
+                                <div key={index} style={{marginBottom: '10px', fontSize: '12px'}}>
+                                    <div style={{fontWeight: '600', marginBottom: '2px'}}>{lang.name}</div>
+                                    <div style={{opacity: '0.9', fontSize: '11px'}}>{lang.level}</div>
+                                </div>
+                            ))}
+
+                            {/* Updates */}
+                            <div className="section-title section-title-light" style={{marginTop: '25px'}}>
+                                <div className="section-icon">
+                                    <i className="fas fa-chart-line"></i>
+                                </div>
+                                Actualizaciones
+                            </div>
+                            <div className="update-badge">
+                                <i className="fas fa-certificate mr-2"></i>
+                                {resumeData.updates}
+                            </div>
+                        </div>
+
+                        {/* Main Content */}
+                        <div className="main-content">
+                            {/* Name Section */}
+                            <div className="name-section">
+                                <input 
+                                    type="text"
+                                    className="name-input"
+                                    value={resumeData.name}
+                                    onChange={(e) => handleInputChange(null, 'name', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                                <input 
+                                    type="text"
+                                    className="title-input"
+                                    value={resumeData.title}
+                                    onChange={(e) => handleInputChange(null, 'title', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
+
+                            {/* Profile */}
+                            <div className="section-title section-title-dark">
+                                <div className="section-icon section-icon-dark">
+                                    <i className="fas fa-id-card"></i>
+                                </div>
+                                Perfil Profesional
+                            </div>
+                            <textarea 
+                                className="edit-field"
+                                style={{fontSize: '13px', lineHeight: '1.7', minHeight: '70px', color: '#555', marginBottom: '30px', background: 'white', padding: '15px', borderRadius: '8px'}}
+                                value={resumeData.profile}
+                                onChange={(e) => handleInputChange(null, 'profile', e.target.value)}
+                                disabled={isCleanView}
+                            />
+
+                            {/* Education */}
+                            <div className="section-title section-title-dark">
+                                <div className="section-icon section-icon-dark">
+                                    <i className="fas fa-graduation-cap"></i>
+                                </div>
+                                Formación Académica
+                            </div>
+                            {resumeData.education.map((edu, index) => (
+                                <div key={index} className="experience-card">
+                                    <div className="experience-title">{edu.degree}</div>
+                                    <div className="experience-company">{edu.school}</div>
+                                    <div className="experience-date">{edu.date}</div>
+                                </div>
+                            ))}
+
+                            {/* Experience */}
+                            <div className="section-title section-title-dark" style={{marginTop: '30px'}}>
+                                <div className="section-icon section-icon-dark">
+                                    <i className="fas fa-briefcase"></i>
+                                </div>
+                                Experiencia Laboral
+                            </div>
+                            {resumeData.experience.map((exp, index) => (
+                                <div key={index} className="experience-card">
+                                    <div className="experience-title">{exp.title}</div>
+                                    <div className="experience-company">{exp.company}</div>
+                                    <div className="experience-date">{exp.date}</div>
+                                    <div className="experience-description">{exp.description}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        ReactDOM.render(<ResumeTemplate />, document.getElementById('root'));
+    </script>
+</body>
+</html>

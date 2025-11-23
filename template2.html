@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Designer Resume Template</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f0f0;
+        }
+
+        .resume-container {
+            background: white;
+            width: 8.5in;
+            min-height: 11in;
+            margin: 20px auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+            display: flex;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 35%;
+            background: linear-gradient(180deg, #3B82F6 0%, #1E40AF 100%);
+            color: white;
+            padding: 40px 30px;
+        }
+
+        .main-content {
+            width: 65%;
+            padding: 40px;
+            background: #F9FAFB;
+        }
+
+        .profile-photo-section {
+            width: 160px;
+            height: 160px;
+            border-radius: 20px;
+            margin: 0 auto 30px;
+            overflow: hidden;
+            border: 4px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            position: relative;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .profile-photo-section:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        .name-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .name-input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 32px;
+            font-weight: 800;
+            text-align: center;
+            width: 100%;
+            outline: none;
+            margin-bottom: 8px;
+        }
+
+        .title-input {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+            text-align: center;
+            width: 100%;
+            outline: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .edit-field {
+            border: 1px dashed transparent;
+            padding: 4px;
+            border-radius: 4px;
+            background: transparent;
+            width: 100%;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .edit-field:focus {
+            border-color: #3B82F6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .section-title-dark {
+            color: #1f2937;
+            border-bottom-color: #3B82F6;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 14px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .contact-icon {
+            width: 18px;
+            margin-right: 10px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .skill-item {
+            margin-bottom: 14px;
+        }
+
+        .skill-dots {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .skill-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .skill-dot.filled {
+            background: white;
+        }
+
+        .reference-item {
+            margin-bottom: 16px;
+            font-size: 12px;
+        }
+
+        .reference-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .experience-item {
+            margin-bottom: 24px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .experience-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1f2937;
+            text-transform: uppercase;
+        }
+
+        .experience-date {
+            color: #3B82F6;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .experience-company {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .bullet-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        .bullet-list li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #3B82F6;
+            font-weight: bold;
+        }
+
+        .controls-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            width: 250px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        @media print {
+            .controls-panel { display: none; }
+            .resume-container { box-shadow: none; margin: 0; }
+            .edit-field { border: none; }
+            .photo-overlay { display: none !important; }
+        }
+
+        .clean-view .edit-field {
+            border: none !important;
+            background: transparent !important;
+            pointer-events: none;
+        }
+
+        .clean-view .photo-overlay {
+            display: none !important;
+        }
+
+        .ai-section {
+            background: #EFF6FF;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .ai-btn {
+            background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useRef } = React;
+
+        function ResumeTemplate() {
+            const [resumeData, setResumeData] = useState({
+                name: 'Andrés Muhammad',
+                title: 'Analista de Sistemas',
+                photo: null,
+                
+                contact: {
+                    phone: '+52 (555) 123-4567',
+                    email: 'andres.muhammad@email.com',
+                    location: 'México, CDMX',
+                    website: 'andres-portfolio.com'
+                },
+                
+                skills: [
+                    { name: 'JavaScript', level: 5 },
+                    { name: 'React', level: 5 },
+                    { name: 'Node.js', level: 4 },
+                    { name: 'Python', level: 4 },
+                    { name: 'SQL', level: 4 },
+                    { name: 'Git', level: 5 }
+                ],
+                
+                languages: [
+                    { name: 'Español', level: 'Nativo' },
+                    { name: 'Inglés', level: 'Avanzado' }
+                ],
+                
+                references: [
+                    {
+                        name: 'Alicia Álvarez',
+                        position: 'Directora Ejecutiva, Sileman',
+                        contact: 'alicia.alvarez@sileman.com / +52 555 123 4567'
+                    },
+                    {
+                        name: 'Miller Cross',
+                        position: 'Coordinador, Instituto Rossi',
+                        contact: 'miller@institutorossi.com'
+                    }
+                ],
+                
+                summary: 'Soy amante de sistemas informáticos con experiencia en análisis de proyectos y con excelente datos. Tengo un perfil resolutivo, proactivo, analítico. Me adapto muy bien al trabajo en equipo. Tengo conocimiento en manejo de sistemas.',
+                
+                mainSkills: [
+                    'Resolución de problemas',
+                    'Pensamiento analítico',
+                    'Desarrollo de software',
+                    'Metodologías ágiles',
+                    'Análisis de requisitos',
+                    'Gestión de proyectos',
+                    'Optimización de procesos',
+                    'Trabajo en equipo',
+                    'Comunicación efectiva',
+                    'Orientación a resultados'
+                ],
+                
+                experience: [
+                    {
+                        title: 'Analista de Sistemas',
+                        company: 'Tech Solutions',
+                        date: 'Junio de 2021 - Presente',
+                        tasks: [
+                            'Análisis de los sistemas administrativos y operativos para implementar las herramientas necesarias en distintos clientes.',
+                            'Diseño, desarrollo y puesta en marcha de software personalizado.',
+                            'Resolución de problemas técnicos de manera rápida y eficiente.'
+                        ]
+                    },
+                    {
+                        title: 'Analista de Datos Senior',
+                        company: 'Estado Luna Abril',
+                        date: 'Ene 2019 - Mayo 2021',
+                        tasks: [
+                            'Recopilación y análisis de datos con distintos sectores.',
+                            'Supervisión de operaciones.',
+                            'Selección y resolución de problemas.',
+                            'Colaboración con otros equipos para diagnósticos.',
+                            'Elaboración de informes.'
+                        ]
+                    }
+                ],
+                
+                education: [
+                    {
+                        degree: 'Instituto KQUH',
+                        field: 'Certificado de Programación Avanzada',
+                        date: 'Octubre 2020',
+                        details: 'Certificado en Ingeniería de Procesos Empresariales. Administración de controladores. Aprendizaje de funcionamiento de sistemas tecnológicos.'
+                    },
+                    {
+                        degree: 'Universidad de Colima',
+                        field: 'Licenciatura en Ingeniería Informática',
+                        date: '2015-2019',
+                        details: 'Especialización en Sistemas. Concentración en optimización de procesos. Proyecto final: Sistema de Gestión de Bases Relacionales.'
+                    }
+                ]
+            });
+
+            const [isCleanView, setIsCleanView] = useState(false);
+            const [isGenerating, setIsGenerating] = useState(false);
+            const photoInputRef = useRef(null);
+
+            const handleInputChange = (section, field, value) => {
+                if (section) {
+                    setResumeData(prev => ({
+                        ...prev,
+                        [section]: {
+                            ...prev[section],
+                            [field]: value
+                        }
+                    }));
+                } else {
+                    setResumeData(prev => ({
+                        ...prev,
+                        [field]: value
+                    }));
+                }
+            };
+
+            const handleSkillChange = (index, level) => {
+                const newSkills = [...resumeData.skills];
+                newSkills[index].level = level;
+                setResumeData(prev => ({ ...prev, skills: newSkills }));
+            };
+
+            const handlePhotoUpload = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        setResumeData(prev => ({
+                            ...prev,
+                            photo: e.target.result
+                        }));
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            const downloadAsImage = async () => {
+                setIsCleanView(true);
+                setTimeout(async () => {
+                    try {
+                        const resume = document.querySelector('.resume-container');
+                        const canvas = await html2canvas(resume, {
+                            scale: 2,
+                            useCORS: true,
+                            backgroundColor: '#ffffff'
+                        });
+                        const link = document.createElement('a');
+                        link.download = 'creative-resume.png';
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        setIsCleanView(false);
+                    } catch (error) {
+                        console.error('Export failed:', error);
+                        alert('Export failed. Please try Print to PDF instead.');
+                        setIsCleanView(false);
+                    }
+                }, 300);
+            };
+
+            const handlePrint = () => {
+                window.print();
+            };
+
+            return (
+                <>
+                    <div className="controls-panel">
+                        <h3 className="text-lg font-bold mb-4 text-gray-800">Resume Controls</h3>
+                        
+                        <div className="ai-section">
+                            <p className="text-xs text-gray-600 mb-2">✨ AI-Powered Enhancement</p>
+                            <button 
+                                className="ai-btn"
+                                onClick={() => alert('AI content generation will be available when deployed to Vercel with GROQ_API_KEY')}
+                            >
+                                <i className="fas fa-magic mr-2"></i>
+                                Enhance with AI
+                            </button>
+                        </div>
+
+                        <button 
+                            className="btn btn-primary" 
+                            onClick={() => photoInputRef.current.click()}
+                        >
+                            <i className="fas fa-camera mr-2"></i>
+                            Upload Photo
+                        </button>
+                        <input 
+                            type="file" 
+                            ref={photoInputRef}
+                            style={{display: 'none'}}
+                            accept="image/*"
+                            onChange={handlePhotoUpload}
+                        />
+
+                        <button className="btn btn-primary" onClick={handlePrint}>
+                            <i className="fas fa-print mr-2"></i>
+                            Print / Save PDF
+                        </button>
+
+                        <button className="btn" style={{background: '#10b981', color: 'white'}} onClick={downloadAsImage}>
+                            <i className="fas fa-image mr-2"></i>
+                            Download as PNG
+                        </button>
+
+                        <button 
+                            className="btn" 
+                            style={{background: '#3b82f6', color: 'white'}}
+                            onClick={() => setIsCleanView(!isCleanView)}
+                        >
+                            <i className={`fas ${isCleanView ? 'fa-edit' : 'fa-eye'} mr-2`}></i>
+                            {isCleanView ? 'Show Editor' : 'Preview'}
+                        </button>
+
+                        <button 
+                            className="btn" 
+                            style={{background: '#ef4444', color: 'white', marginTop: '20px'}}
+                            onClick={() => window.location.href = 'index.html'}
+                        >
+                            <i className="fas fa-arrow-left mr-2"></i>
+                            Back to Templates
+                        </button>
+                    </div>
+
+                    <div className={`resume-container ${isCleanView ? 'clean-view' : ''}`}>
+                        {/* Sidebar */}
+                        <div className="sidebar">
+                            {/* Photo */}
+                            <div 
+                                className="profile-photo-section"
+                                onClick={() => !isCleanView && photoInputRef.current.click()}
+                            >
+                                {resumeData.photo ? (
+                                    <img src={resumeData.photo} alt="Profile" className="profile-photo" />
+                                ) : (
+                                    <div style={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+                                        <i className="fas fa-user text-4xl mb-2 opacity-50"></i>
+                                        <span className="text-xs opacity-75">Upload Photo</span>
+                                    </div>
+                                )}
+                                <div className="photo-overlay">
+                                    <div className="text-center">
+                                        <i className="fas fa-camera text-2xl"></i>
+                                        <p className="text-xs mt-2">Change</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Name */}
+                            <div className="name-section">
+                                <input 
+                                    type="text"
+                                    className="name-input"
+                                    value={resumeData.name}
+                                    onChange={(e) => handleInputChange(null, 'name', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                                <input 
+                                    type="text"
+                                    className="title-input"
+                                    value={resumeData.title}
+                                    onChange={(e) => handleInputChange(null, 'title', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
+
+                            {/* Contact */}
+                            <div className="section-title">Datos de contacto</div>
+                            <div className="contact-item">
+                                <i className="fas fa-phone contact-icon"></i>
+                                <input 
+                                    type="text"
+                                    className="edit-field"
+                                    style={{color: 'white', fontSize: '12px'}}
+                                    value={resumeData.contact.phone}
+                                    onChange={(e) => handleInputChange('contact', 'phone', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
+                            <div className="contact-item">
+                                <i className="fas fa-envelope contact-icon"></i>
+                                <input 
+                                    type="text"
+                                    className="edit-field"
+                                    style={{color: 'white', fontSize: '12px'}}
+                                    value={resumeData.contact.email}
+                                    onChange={(e) => handleInputChange('contact', 'email', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
+                            <div className="contact-item">
+                                <i className="fas fa-map-marker-alt contact-icon"></i>
+                                <input 
+                                    type="text"
+                                    className="edit-field"
+                                    style={{color: 'white', fontSize: '12px'}}
+                                    value={resumeData.contact.location}
+                                    onChange={(e) => handleInputChange('contact', 'location', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
+                            <div className="contact-item">
+                                <i className="fas fa-globe contact-icon"></i>
+                                <input 
+                                    type="text"
+                                    className="edit-field"
+                                    style={{color: 'white', fontSize: '12px'}}
+                                    value={resumeData.contact.website}
+                                    onChange={(e) => handleInputChange('contact', 'website', e.target.value)}
+                                    disabled={isCleanView}
+                                />
+                            </div>
+
+                            {/* Referencias */}
+                            <div className="section-title" style={{marginTop: '30px'}}>Referencias laborales</div>
+                            {resumeData.references.map((ref, index) => (
+                                <div key={index} className="reference-item">
+                                    <div className="reference-name">{ref.name}</div>
+                                    <div style={{fontSize: '11px', opacity: 0.9}}>{ref.position}</div>
+                                    <div style={{fontSize: '10px', opacity: 0.8, marginTop: '4px'}}>{ref.contact}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Main Content */}
+                        <div className="main-content">
+                            {/* Resumen */}
+                            <div className="section-title section-title-dark">Resumen</div>
+                            <textarea 
+                                className="edit-field"
+                                style={{fontSize: '13px', lineHeight: '1.6', minHeight: '70px', color: '#4b5563', marginBottom: '24px'}}
+                                value={resumeData.summary}
+                                onChange={(e) => handleInputChange(null, 'summary', e.target.value)}
+                                disabled={isCleanView}
+                            />
+
+                            {/* Habilidades principales */}
+                            <div className="section-title section-title-dark">Habilidades principales</div>
+                            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px'}}>
+                                {resumeData.mainSkills.map((skill, index) => (
+                                    <div key={index} style={{fontSize: '12px', color: '#4b5563', display: 'flex', alignItems: 'center'}}>
+                                        <span style={{color: '#3B82F6', marginRight: '8px'}}>▸</span>
+                                        {skill}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Experiencia laboral */}
+                            <div className="section-title section-title-dark">Experiencia laboral</div>
+                            {resumeData.experience.map((exp, index) => (
+                                <div key={index} className="experience-item">
+                                    <div className="experience-header">
+                                        <div>
+                                            <div className="experience-title">{exp.title}</div>
+                                            <div className="experience-company">{exp.company}</div>
+                                        </div>
+                                        <div className="experience-date">{exp.date}</div>
+                                    </div>
+                                    <ul className="bullet-list">
+                                        {exp.tasks.map((task, i) => (
+                                            <li key={i}>{task}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+
+                            {/* Formación académica */}
+                            <div className="section-title section-title-dark">Formación académica</div>
+                            {resumeData.education.map((edu, index) => (
+                                <div key={index} className="experience-item">
+                                    <div className="experience-title" style={{fontSize: '14px'}}>{edu.degree}</div>
+                                    <div className="experience-company">{edu.field}</div>
+                                    <div className="experience-date" style={{marginTop: '4px', marginBottom: '8px'}}>{edu.date}</div>
+                                    <p style={{fontSize: '12px', color: '#6b7280', lineHeight: '1.5'}}>{edu.details}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        ReactDOM.render(<ResumeTemplate />, document.getElementById('root'));
+    </script>
+</body>
+</html>
