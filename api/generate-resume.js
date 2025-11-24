@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -17,6 +17,12 @@ export default async function handler(req, res) {
 
   try {
     const { prompt } = req.body;
+
+    if (!process.env.GROQ_API_KEY) {
+      throw new Error('GROQ_API_KEY is not configured');
+    }
+
+    const fetch = (await import('node-fetch')).default;
 
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
@@ -50,4 +56,4 @@ export default async function handler(req, res) {
       error: error.message || 'Failed to generate resume' 
     });
   }
-}
+};
