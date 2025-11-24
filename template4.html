@@ -10,6 +10,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
         
@@ -72,6 +74,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center center;
         }
 
         .photo-overlay {
@@ -383,6 +386,133 @@
             border-color: #374151;
             transform: scale(1.1);
         }
+
+        /* Image Cropper Modal Styles */
+        .cropper-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cropper-modal.active {
+            display: flex;
+        }
+
+        .cropper-container-wrapper {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow: auto;
+        }
+
+        .cropper-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .cropper-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .cropper-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cropper-close:hover {
+            color: #1f2937;
+        }
+
+        .cropper-image-container {
+            max-height: 400px;
+            margin-bottom: 15px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .cropper-image-container img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .cropper-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .cropper-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .cropper-btn-zoom-in {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .cropper-btn-zoom-out {
+            background: #6b7280;
+            color: white;
+        }
+
+        .cropper-btn-rotate {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .cropper-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .cropper-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .cropper-btn-cancel {
+            flex: 1;
+            background: #ef4444;
+            color: white;
+        }
+
+        .cropper-btn-apply {
+            flex: 1;
+            background: #10b981;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -470,6 +600,10 @@
 
             const [isCleanView, setIsCleanView] = useState(false);
             const photoInputRef = useRef(null);
+            const [showCropper, setShowCropper] = useState(false);
+            const [cropperInstance, setCropperInstance] = useState(null);
+            const cropperImageRef = useRef(null);
+            const [tempImageSrc, setTempImageSrc] = useState(null);
 
             const colorPresets = [
                 '#7C9885', '#667eea', '#3B82F6', '#10B981', '#8B5CF6',
@@ -518,14 +652,95 @@
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
-                        setResumeData(prev => ({
-                            ...prev,
-                            photo: e.target.result
-                        }));
+                        setTempImageSrc(e.target.result);
+                        setShowCropper(true);
                     };
                     reader.readAsDataURL(file);
                 }
             };
+
+            const initializeCropper = () => {
+                if (cropperImageRef.current && tempImageSrc) {
+                    if (cropperInstance) {
+                        cropperInstance.destroy();
+                    }
+                    const cropper = new Cropper(cropperImageRef.current, {
+                        aspectRatio: 1,
+                        viewMode: 2,
+                        dragMode: 'move',
+                        autoCropArea: 1,
+                        restore: false,
+                        guides: true,
+                        center: true,
+                        highlight: false,
+                        cropBoxMovable: true,
+                        cropBoxResizable: true,
+                        toggleDragModeOnDblclick: false,
+                    });
+                    setCropperInstance(cropper);
+                }
+            };
+
+            const handleCropperApply = () => {
+                if (cropperInstance) {
+                    const canvas = cropperInstance.getCroppedCanvas({
+                        width: 400,
+                        height: 400,
+                        imageSmoothingEnabled: true,
+                        imageSmoothingQuality: 'high',
+                    });
+                    
+                    canvas.toBlob((blob) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            setResumeData(prev => ({
+                                ...prev,
+                                photo: e.target.result
+                            }));
+                            handleCropperCancel();
+                        };
+                        reader.readAsDataURL(blob);
+                    }, 'image/jpeg', 0.95);
+                }
+            };
+
+            const handleCropperCancel = () => {
+                if (cropperInstance) {
+                    cropperInstance.destroy();
+                    setCropperInstance(null);
+                }
+                setShowCropper(false);
+                setTempImageSrc(null);
+                if (photoInputRef.current) {
+                    photoInputRef.current.value = '';
+                }
+            };
+
+            const handleCropperZoomIn = () => {
+                if (cropperInstance) {
+                    cropperInstance.zoom(0.1);
+                }
+            };
+
+            const handleCropperZoomOut = () => {
+                if (cropperInstance) {
+                    cropperInstance.zoom(-0.1);
+                }
+            };
+
+            const handleCropperRotate = () => {
+                if (cropperInstance) {
+                    cropperInstance.rotate(90);
+                }
+            };
+
+            React.useEffect(() => {
+                if (showCropper && tempImageSrc) {
+                    setTimeout(() => {
+                        initializeCropper();
+                    }, 100);
+                }
+            }, [showCropper, tempImageSrc]);
 
             const downloadAsImage = async () => {
                 setIsCleanView(true);
@@ -1099,6 +1314,58 @@
                                 onChange={(e) => handleInputChange(null, 'summary', e.target.value)}
                                 disabled={isCleanView}
                             />
+                        </div>
+                    </div>
+
+                    {/* Image Cropper Modal */}
+                    <div className={`cropper-modal ${showCropper ? 'active' : ''}`}>
+                        <div className="cropper-container-wrapper">
+                            <div className="cropper-header">
+                                <h3>
+                                    <i className="fas fa-crop-alt mr-2"></i>
+                                    Crop Your Photo
+                                </h3>
+                                <button className="cropper-close" onClick={handleCropperCancel}>
+                                    <i className="fas fa-times"></i>
+                                </button>
+                            </div>
+                            
+                            <div className="cropper-image-container">
+                                {tempImageSrc && (
+                                    <img 
+                                        ref={cropperImageRef}
+                                        src={tempImageSrc} 
+                                        alt="Crop preview"
+                                        style={{maxWidth: '100%'}}
+                                    />
+                                )}
+                            </div>
+
+                            <div className="cropper-controls">
+                                <button className="cropper-btn cropper-btn-zoom-in" onClick={handleCropperZoomIn}>
+                                    <i className="fas fa-search-plus mr-1"></i>
+                                    Zoom In
+                                </button>
+                                <button className="cropper-btn cropper-btn-zoom-out" onClick={handleCropperZoomOut}>
+                                    <i className="fas fa-search-minus mr-1"></i>
+                                    Zoom Out
+                                </button>
+                                <button className="cropper-btn cropper-btn-rotate" onClick={handleCropperRotate}>
+                                    <i className="fas fa-redo mr-1"></i>
+                                    Rotate
+                                </button>
+                            </div>
+
+                            <div className="cropper-actions">
+                                <button className="cropper-btn cropper-btn-cancel" onClick={handleCropperCancel}>
+                                    <i className="fas fa-times mr-1"></i>
+                                    Cancel
+                                </button>
+                                <button className="cropper-btn cropper-btn-apply" onClick={handleCropperApply}>
+                                    <i className="fas fa-check mr-1"></i>
+                                    Apply & Save
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </>
