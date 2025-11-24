@@ -18,11 +18,20 @@ module.exports = async (req, res) => {
   try {
     const { prompt } = req.body;
 
+    console.log('API Key exists:', !!process.env.GROQ_API_KEY);
+    console.log('Prompt received:', !!prompt);
+
     if (!process.env.GROQ_API_KEY) {
-      throw new Error('GROQ_API_KEY is not configured');
+      return res.status(500).json({ 
+        error: 'GROQ_API_KEY is not configured. Please add it in Vercel Environment Variables.' 
+      });
     }
 
-    const fetch = (await import('node-fetch')).default;
+    if (!prompt) {
+      return res.status(400).json({ 
+        error: 'Prompt is required' 
+      });
+    }
 
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
@@ -45,15 +54,21 @@ module.exports = async (req, res) => {
 
     const data = await response.json();
     
+    console.log('Groq API response status:', response.status);
+    
     if (!response.ok) {
-      throw new Error(data.error?.message || 'API request failed');
+      console.error('Groq API error:', data);
+      return res.status(response.status).json({ 
+        error: data.error?.message || 'Groq API request failed' 
+      });
     }
 
     return res.status(200).json(data);
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Server error:', error);
     return res.status(500).json({ 
-      error: error.message || 'Failed to generate resume' 
+      error: error.message || 'Failed to generate resume',
+      details: error.toString()
     });
   }
 };
