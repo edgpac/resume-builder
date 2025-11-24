@@ -23,7 +23,8 @@
         .resume-container {
             background: white;
             width: 8.5in;
-            min-height: 11in;
+            height: 11in;
+            max-height: 11in;
             margin: 20px auto;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
             position: relative;
@@ -41,22 +42,22 @@
         }
 
         .sidebar-header {
-            padding: 40px 30px;
+            padding: 35px 28px;
             clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-            min-height: 200px;
+            min-height: 180px;
         }
 
         .main-content {
             width: 60%;
-            padding: 40px;
+            padding: 35px;
             background: white;
         }
 
         .profile-photo-section {
-            width: 180px;
-            height: 180px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            margin: 0 auto 20px;
+            margin: 0 auto 18px;
             overflow: hidden;
             border: 5px solid white;
             cursor: pointer;
@@ -88,14 +89,14 @@
 
         .name-section {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .name-input {
             background: transparent;
             border: none;
             color: white;
-            font-size: 40px;
+            font-size: 36px;
             font-weight: 900;
             text-align: center;
             width: 100%;
@@ -108,7 +109,7 @@
             background: transparent;
             border: none;
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             text-align: center;
             width: 100%;
             outline: none;
@@ -117,7 +118,7 @@
         }
 
         .sidebar-content {
-            padding: 30px;
+            padding: 25px 28px;
         }
 
         .edit-field {
@@ -137,12 +138,12 @@
 
         .section-title {
             position: relative;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
+            margin-bottom: 14px;
+            padding-bottom: 7px;
         }
 
         .section-title-input {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -180,28 +181,28 @@
         .info-row {
             display: flex;
             align-items: center;
-            margin-bottom: 14px;
-            font-size: 13px;
+            margin-bottom: 12px;
+            font-size: 12px;
         }
 
         .info-icon {
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 12px;
+            margin-right: 10px;
             flex-shrink: 0;
         }
 
         .skill-bar-container {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .skill-name {
-            font-size: 13px;
-            margin-bottom: 6px;
+            font-size: 12px;
+            margin-bottom: 5px;
             display: flex;
             justify-content: space-between;
         }
@@ -220,46 +221,46 @@
         }
 
         .experience-item {
-            margin-bottom: 28px;
+            margin-bottom: 24px;
             position: relative;
-            padding-left: 20px;
+            padding-left: 18px;
         }
 
         .experience-item:before {
             content: '';
             position: absolute;
             left: 0;
-            top: 8px;
-            width: 10px;
-            height: 10px;
+            top: 7px;
+            width: 9px;
+            height: 9px;
             border-radius: 50%;
         }
 
         .experience-title {
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             color: #1a1a1a;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .experience-company {
             font-weight: 500;
-            font-size: 14px;
-            margin-bottom: 8px;
+            font-size: 13px;
+            margin-bottom: 6px;
         }
 
         .experience-date {
             color: #666;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 8px;
+            margin-bottom: 7px;
         }
 
         .experience-description {
-            font-size: 13px;
+            font-size: 12px;
             color: #4a4a4a;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         .controls-panel {
@@ -324,13 +325,13 @@
         .achievement-item {
             display: flex;
             align-items: flex-start;
-            margin-bottom: 12px;
-            font-size: 13px;
+            margin-bottom: 10px;
+            font-size: 12px;
             color: rgba(255,255,255,0.9);
         }
 
         .achievement-icon {
-            margin-right: 10px;
+            margin-right: 8px;
             margin-top: 2px;
         }
 
@@ -417,7 +418,6 @@
                 education: 'Educación',
                 skills: 'Habilidades',
                 languages: 'Idiomas',
-                achievements: 'Logros',
                 profile: 'Perfil',
                 experience: 'Experiencia Laboral'
             });
@@ -445,12 +445,6 @@
                 languages: [
                     { name: 'Idioma 1', level: 'Nativo' },
                     { name: 'Idioma 2', level: 'Avanzado' }
-                ],
-                
-                achievements: [
-                    'FOCO HACIA LOS RESULTADOS',
-                    'INNOVACIÓN Y EMPRENDIMIENTO SOCIAL 2022',
-                    'CERTIFICACIÓN DE MEJORA CONTINUA EN PROCESOS ADMINISTRATIVOS POR EL INSTITUTO FAUGET DE RELACIONES'
                 ],
                 
                 experience: [
@@ -910,11 +904,11 @@
                                     />
                                 </div>
                                 {resumeData.education.map((edu, index) => (
-                                    <div key={index} style={{marginBottom: '20px'}}>
+                                    <div key={index} style={{marginBottom: '16px'}}>
                                         <input 
                                             type="text"
                                             className="edit-field"
-                                            style={{fontWeight: '700', fontSize: '14px', marginBottom: '4px', color: 'white'}}
+                                            style={{fontWeight: '700', fontSize: '13px', marginBottom: '3px', color: 'white'}}
                                             value={edu.degree}
                                             onChange={(e) => handleArrayItemChange('education', index, 'degree', e.target.value)}
                                             disabled={isCleanView}
@@ -922,7 +916,7 @@
                                         <input 
                                             type="text"
                                             className="edit-field"
-                                            style={{fontSize: '13px', opacity: '0.9', marginBottom: '6px', color: 'white'}}
+                                            style={{fontSize: '12px', opacity: '0.9', marginBottom: '5px', color: 'white'}}
                                             value={edu.field}
                                             onChange={(e) => handleArrayItemChange('education', index, 'field', e.target.value)}
                                             disabled={isCleanView}
@@ -930,7 +924,7 @@
                                         <input 
                                             type="text"
                                             className="edit-field"
-                                            style={{fontSize: '12px', opacity: '0.8', lineHeight: '1.4', color: 'white'}}
+                                            style={{fontSize: '11px', opacity: '0.8', lineHeight: '1.3', color: 'white'}}
                                             value={edu.details}
                                             onChange={(e) => handleArrayItemChange('education', index, 'details', e.target.value)}
                                             disabled={isCleanView}
@@ -939,7 +933,7 @@
                                 ))}
 
                                 {/* Skills */}
-                                <div className="section-title section-title-light" style={{marginTop: '30px'}}>
+                                <div className="section-title section-title-light" style={{marginTop: '26px'}}>
                                     <input 
                                         type="text"
                                         className="section-title-input"
@@ -978,7 +972,7 @@
                                 ))}
 
                                 {/* Languages */}
-                                <div className="section-title section-title-light" style={{marginTop: '30px'}}>
+                                <div className="section-title section-title-light" style={{marginTop: '26px'}}>
                                     <input 
                                         type="text"
                                         className="section-title-input"
@@ -988,7 +982,7 @@
                                     />
                                 </div>
                                 {resumeData.languages.map((lang, index) => (
-                                    <div key={index} style={{marginBottom: '10px', fontSize: '13px', display: 'flex', gap: '10px'}}>
+                                    <div key={index} style={{marginBottom: '8px', fontSize: '12px', display: 'flex', gap: '10px'}}>
                                         <input 
                                             type="text"
                                             className="edit-field"
@@ -1007,41 +1001,13 @@
                                         />
                                     </div>
                                 ))}
-
-                                {/* Achievements */}
-                                <div className="section-title section-title-light" style={{marginTop: '30px'}}>
-                                    <input 
-                                        type="text"
-                                        className="section-title-input"
-                                        value={sectionTitles.achievements}
-                                        onChange={(e) => handleSectionTitleChange('achievements', e.target.value)}
-                                        disabled={isCleanView}
-                                    />
-                                </div>
-                                {resumeData.achievements.map((achievement, index) => (
-                                    <div key={index} className="achievement-item">
-                                        <i className="fas fa-trophy achievement-icon"></i>
-                                        <input 
-                                            type="text"
-                                            className="edit-field"
-                                            style={{flex: 1, color: 'rgba(255,255,255,0.9)', fontSize: '13px'}}
-                                            value={achievement}
-                                            onChange={(e) => {
-                                                const newAchievements = [...resumeData.achievements];
-                                                newAchievements[index] = e.target.value;
-                                                setResumeData(prev => ({...prev, achievements: newAchievements}));
-                                            }}
-                                            disabled={isCleanView}
-                                        />
-                                    </div>
-                                ))}
                             </div>
                         </div>
 
                         {/* Main Content */}
                         <div className="main-content">
                             {/* Contact Info */}
-                            <div style={{marginBottom: '30px'}}>
+                            <div style={{marginBottom: '26px'}}>
                                 <div className="info-row">
                                     <div className="info-icon">
                                         <i className="fas fa-phone"></i>
@@ -1049,7 +1015,7 @@
                                     <input 
                                         type="text"
                                         className="edit-field"
-                                        style={{color: '#1a1a1a', fontSize: '13px'}}
+                                        style={{color: '#1a1a1a', fontSize: '12px'}}
                                         value={resumeData.contact.phone}
                                         onChange={(e) => handleInputChange('contact', 'phone', e.target.value)}
                                         disabled={isCleanView}
@@ -1062,7 +1028,7 @@
                                     <input 
                                         type="text"
                                         className="edit-field"
-                                        style={{color: '#1a1a1a', fontSize: '13px'}}
+                                        style={{color: '#1a1a1a', fontSize: '12px'}}
                                         value={resumeData.contact.email}
                                         onChange={(e) => handleInputChange('contact', 'email', e.target.value)}
                                         disabled={isCleanView}
@@ -1075,7 +1041,7 @@
                                     <input 
                                         type="text"
                                         className="edit-field"
-                                        style={{color: '#1a1a1a', fontSize: '13px'}}
+                                        style={{color: '#1a1a1a', fontSize: '12px'}}
                                         value={resumeData.contact.location}
                                         onChange={(e) => handleInputChange('contact', 'location', e.target.value)}
                                         disabled={isCleanView}
@@ -1088,7 +1054,7 @@
                                     <input 
                                         type="text"
                                         className="edit-field"
-                                        style={{color: '#1a1a1a', fontSize: '13px'}}
+                                        style={{color: '#1a1a1a', fontSize: '12px'}}
                                         value={resumeData.contact.website}
                                         onChange={(e) => handleInputChange('contact', 'website', e.target.value)}
                                         disabled={isCleanView}
@@ -1108,7 +1074,7 @@
                             </div>
                             <textarea 
                                 className="edit-field"
-                                style={{fontSize: '13px', lineHeight: '1.6', minHeight: '90px', color: '#4a4a4a', marginBottom: '30px'}}
+                                style={{fontSize: '12px', lineHeight: '1.5', minHeight: '75px', color: '#4a4a4a', marginBottom: '26px'}}
                                 value={resumeData.summary}
                                 onChange={(e) => handleInputChange(null, 'summary', e.target.value)}
                                 disabled={isCleanView}
@@ -1152,7 +1118,7 @@
                                         value={exp.description}
                                         onChange={(e) => handleArrayItemChange('experience', index, 'description', e.target.value)}
                                         disabled={isCleanView}
-                                        style={{minHeight: '60px'}}
+                                        style={{minHeight: '50px'}}
                                     />
                                 </div>
                             ))}
