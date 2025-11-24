@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cover Letter Generator</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .letter-preview {
+            background: white;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            line-height: 1.8;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .letter-header {
+            margin-bottom: 40px;
+        }
+
+        .letter-date {
+            margin-bottom: 30px;
+            color: #6b7280;
+        }
+
+        .letter-body {
+            margin-bottom: 30px;
+        }
+
+        .letter-paragraph {
+            margin-bottom: 20px;
+        }
+
+        .letter-closing {
+            margin-top: 40px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .letter-preview {
+                padding: 40px 30px;
+            }
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function AICoverLetterGenerator() {
+            const [formData, setFormData] = useState({
+                name: '',
+                email: '',
+                phone: '',
+                address: '',
+                companyName: '',
+                hiringManager: '',
+                position: '',
+                howYouFound: '',
+                whyInterested: '',
+                relevantExperience: '',
+                skills: '',
+                closingStatement: ''
+            });
+
+            const [generatedLetter, setGeneratedLetter] = useState(null);
+            const [isGenerating, setIsGenerating] = useState(false);
+            const [error, setError] = useState(null);
+
+            const handleInputChange = (field, value) => {
+                setFormData(prev => ({
+                    ...prev,
+                    [field]: value
+                }));
+            };
+
+            const generateCoverLetter = async () => {
+                setIsGenerating(true);
+                setError(null);
+
+                try {
+                    const prompt = `Create a professional cover letter based on the following information. Format it as a structured JSON object. Make the content professional, compelling, and personalized.
+
+Applicant Information:
+Name: ${formData.name}
+Email: ${formData.email}
+Phone: ${formData.phone}
+Address: ${formData.address}
+
+Job Application Details:
+Company: ${formData.companyName}
+Hiring Manager: ${formData.hiringManager || 'Hiring Manager'}
+Position: ${formData.position}
+How I found this position: ${formData.howYouFound}
+
+Content Details:
+Why I'm interested: ${formData.whyInterested}
+Relevant experience: ${formData.relevantExperience}
+Key skills: ${formData.skills}
+Closing statement: ${formData.closingStatement}
+
+Please return ONLY a valid JSON object (no markdown, no backticks) with this structure:
+{
+  "header": {
+    "name": "Full Name",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email"
+  },
+  "date": "Current date formatted as 'Month Day, Year'",
+  "recipient": {
+    "name": "Hiring Manager Name or 'Hiring Manager'",
+    "title": "Position title if known",
+    "company": "Company Name",
+    "address": "Company address if available"
+  },
+  "greeting": "Dear [Name],",
+  "paragraphs": [
+    "Opening paragraph expressing interest and how you found the position",
+    "Body paragraph highlighting relevant experience and achievements",
+    "Body paragraph showcasing skills and qualifications",
+    "Closing paragraph expressing enthusiasm and call to action"
+  ],
+  "closing": "Sincerely,",
+  "signature": "Full Name"
+}`;
+
+                    const response = await fetch("/api/generate-cover-letter", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            prompt: prompt
+                        })
+                    });
+
+                    const data = await response.json();
+                    
+                    console.log('API Response:', data);
+
+                    if (!response.ok || data.error) {
+                        const errorMsg = data.error || data.details || 'Failed to generate cover letter';
+                        throw new Error(errorMsg);
+                    }
+
+                    const textContent = data.choices[0].message.content;
+
+                    const cleanedText = textContent
+                        .replace(/```json/g, '')
+                        .replace(/```/g, '')
+                        .trim();
+
+                    const letterData = JSON.parse(cleanedText);
+                    setGeneratedLetter(letterData);
+                    setIsGenerating(false);
+                } catch (err) {
+                    console.error('Error generating cover letter:', err);
+                    setError(err.message || 'Failed to generate cover letter. Please try again.');
+                    setIsGenerating(false);
+                }
+            };
+
+            const downloadAsPNG = async () => {
+                try {
+                    const letter = document.querySelector('.letter-preview');
+                    const canvas = await html2canvas(letter, {
+                        scale: 3,
+                        useCORS: true,
+                        backgroundColor: '#ffffff'
+                    });
+                    const link = document.createElement('a');
+                    link.download = `${formData.name.replace(/\s+/g, '_')}_cover_letter.png`;
+                    link.href = canvas.toDataURL('image/png', 1.0);
+                    link.click();
+                } catch (error) {
+                    console.error('Export failed:', error);
+                    alert('Export failed. Please try again.');
+                }
+            };
+
+            const copyToClipboard = () => {
+                const letterText = document.querySelector('.letter-preview').innerText;
+                navigator.clipboard.writeText(letterText).then(() => {
+                    alert('Cover letter copied to clipboard!');
+                });
+            };
+
+            const printLetter = () => {
+                window.print();
+            };
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1 style={{fontSize: '48px', fontWeight: '800', marginBottom: '16px'}}>
+                            <i className="fas fa-envelope-open-text"></i> AI Cover Letter Generator
+                        </h1>
+                        <p style={{fontSize: '20px', opacity: '0.9'}}>
+                            Let AI help you create a professional cover letter tailored to your application
+                        </p>
+                    </div>
+
+                    {!generatedLetter ? (
+                        <div className="card">
+                            <h2 style={{fontSize: '24px', fontWeight: '700', marginBottom: '24px', color: '#1f2937'}}>
+                                Tell us about your application
+                            </h2>
+
+                            <div style={{marginBottom: '30px', paddingBottom: '20px', borderBottom: '2px solid #e5e7eb'}}>
+                                <h3 style={{fontSize: '18px', fontWeight: '600', color: '#4b5563', marginBottom: '16px'}}>
+                                    Your Contact Information
+                                </h3>
+                                <div className="grid-2">
+                                    <div className="form-group">
+                                        <label className="form-label">Full Name *</label>
+                                        <input 
+                                            type="text"
+                                            className="form-input"
+                                            value={formData.name}
+                                            onChange={(e) => handleInputChange('name', e.target.value)}
+                                            placeholder="John Doe"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="form-label">Email *</label>
+                                        <input 
+                                            type="email"
+                                            className="form-input"
+                                            value={formData.email}
+                                            onChange={(e) => handleInputChange('email', e.target.value)}
+                                            placeholder="john@example.com"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="form-label">Phone</label>
+                                        <input 
+                                            type="tel"
+                                            className="form-input"
+                                            value={formData.phone}
+                                            onChange={(e) => handleInputChange('phone', e.target.value)}
+                                            placeholder="(555) 123-4567"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="form-label">Address</label>
+                                        <input 
+                                            type="text"
+                                            className="form-input"
+                                            value={formData.address}
+                                            onChange={(e) => handleInputChange('address', e.target.value)}
+                                            placeholder="123 Main St, City, State"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style={{marginBottom: '30px', paddingBottom: '20px', borderBottom: '2px solid #e5e7eb'}}>
+                                <h3 style={{fontSize: '18px', fontWeight: '600', color: '#4b5563', marginBottom: '16px'}}>
+                                    Job Details
+                                </h3>
+                                <div className="grid-2">
+                                    <div className="form-group">
+                                        <label className="form-label">Company Name *</label>
+                                        <input 
+                                            type="text"
+                                            className="form-input"
+                                            value={formData.companyName}
+                                            onChange={(e) => handleInputChange('companyName', e.target.value)}
+                                            placeholder="Acme Corporation"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="form-label">Hiring Manager Name</label>
+                                        <input 
+                                            type="text"
+                                            className="form-input"
+                                            value={formData.hiringManager}
+                                            onChange={(e) => handleInputChange('hiringManager', e.target.value)}
+                                            placeholder="Jane Smith (if known)"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Position Applying For *</label>
+                                    <input 
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.position}
+                                        onChange={(e) => handleInputChange('position', e.target.value)}
+                                        placeholder="Senior Software Engineer"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">How did you find this position?</label>
+                                    <input 
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.howYouFound}
+                                        onChange={(e) => handleInputChange('howYouFound', e.target.value)}
+                                        placeholder="LinkedIn job posting, company website, referral, etc."
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={{marginBottom: '30px'}}>
+                                <h3 style={{fontSize: '18px', fontWeight: '600', color: '#4b5563', marginBottom: '16px'}}>
+                                    Your Story
+                                </h3>
+
+                                <div className="form-group">
+                                    <label className="form-label">Why are you interested in this position? *</label>
+                                    <textarea 
+                                        className="form-textarea"
+                                        value={formData.whyInterested}
+                                        onChange={(e) => handleInputChange('whyInterested', e.target.value)}
+                                        placeholder="Explain what attracts you to this role and company..."
+                                        style={{minHeight: '100px'}}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Relevant Experience *</label>
+                                    <textarea 
+                                        className="form-textarea"
+                                        value={formData.relevantExperience}
+                                        onChange={(e) => handleInputChange('relevantExperience', e.target.value)}
+                                        placeholder="Describe your relevant work experience and achievements..."
+                                        style={{minHeight: '120px'}}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Key Skills *</label>
+                                    <textarea 
+                                        className="form-textarea"
+                                        value={formData.skills}
+                                        onChange={(e) => handleInputChange('skills', e.target.value)}
+                                        placeholder="List your key skills relevant to this position..."
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Closing Statement</label>
+                                    <textarea 
+                                        className="form-textarea"
+                                        value={formData.closingStatement}
+                                        onChange={(e) => handleInputChange('closingStatement', e.target.value)}
+                                        placeholder="Any additional information or call to action..."
+                                    />
+                                </div>
+                            </div>
+
+                            {error && (
+                                <div style={{padding: '12px', background: '#fee2e2', color: '#991b1b', borderRadius: '8px', marginBottom: '20px'}}>
+                                    <i className="fas fa-exclamation-circle"></i> {error}
+                                </div>
+                            )}
+
+                            <button 
+                                className="btn btn-primary"
+                                onClick={generateCoverLetter}
+                                disabled={isGenerating || !formData.name || !formData.email || !formData.companyName || !formData.position}
+                                style={{width: '100%', fontSize: '16px', padding: '16px'}}
+                            >
+                                {isGenerating ? (
+                                    <>
+                                        <i className="fas fa-spinner fa-spin"></i> Generating Your Cover Letter...
+                                    </>
+                                ) : (
+                                    <>
+                                        <i className="fas fa-magic"></i> Generate Cover Letter with AI
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="card">
+                                <div style={{textAlign: 'center', marginBottom: '20px'}}>
+                                    <h2 style={{fontSize: '24px', fontWeight: '700', color: '#1f2937', marginBottom: '8px'}}>
+                                        <i className="fas fa-check-circle" style={{color: '#10b981'}}></i> Your Cover Letter is Ready!
+                                    </h2>
+                                    <p style={{color: '#6b7280'}}>Review and export your professionally generated cover letter</p>
+                                </div>
+
+                                <div className="export-buttons">
+                                    <button className="btn btn-primary" onClick={downloadAsPNG}>
+                                        <i className="fas fa-download"></i> Download as PNG
+                                    </button>
+                                    <button className="btn btn-secondary" onClick={printLetter}>
+                                        <i className="fas fa-print"></i> Print / Save as PDF
+                                    </button>
+                                    <button 
+                                        className="btn" 
+                                        style={{background: '#3b82f6', color: 'white'}}
+                                        onClick={copyToClipboard}
+                                    >
+                                        <i className="fas fa-copy"></i> Copy to Clipboard
+                                    </button>
+                                    <button 
+                                        className="btn" 
+                                        style={{background: '#ef4444', color: 'white'}}
+                                        onClick={() => setGeneratedLetter(null)}
+                                    >
+                                        <i className="fas fa-redo"></i> Start Over
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="letter-preview">
+                                {/* Header */}
+                                <div className="letter-header">
+                                    <div style={{fontWeight: '600', fontSize: '16px', marginBottom: '4px'}}>
+                                        {generatedLetter.header.name}
+                                    </div>
+                                    {generatedLetter.header.address && (
+                                        <div style={{fontSize: '13px', color: '#6b7280'}}>
+                                            {generatedLetter.header.address}
+                                        </div>
+                                    )}
+                                    {generatedLetter.header.phone && (
+                                        <div style={{fontSize: '13px', color: '#6b7280'}}>
+                                            {generatedLetter.header.phone}
+                                        </div>
+                                    )}
+                                    {generatedLetter.header.email && (
+                                        <div style={{fontSize: '13px', color: '#6b7280'}}>
+                                            {generatedLetter.header.email}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Date */}
+                                <div className="letter-date">
+                                    {generatedLetter.date}
+                                </div>
+
+                                {/* Recipient */}
+                                {generatedLetter.recipient && (
+                                    <div style={{marginBottom: '30px'}}>
+                                        <div style={{fontWeight: '600'}}>
+                                            {generatedLetter.recipient.name}
+                                        </div>
+                                        {generatedLetter.recipient.title && (
+                                            <div>{generatedLetter.recipient.title}</div>
+                                        )}
+                                        <div>{generatedLetter.recipient.company}</div>
+                                        {generatedLetter.recipient.address && (
+                                            <div>{generatedLetter.recipient.address}</div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Greeting */}
+                                <div style={{marginBottom: '20px', fontWeight: '600'}}>
+                                    {generatedLetter.greeting}
+                                </div>
+
+                                {/* Body Paragraphs */}
+                                <div className="letter-body">
+                                    {generatedLetter.paragraphs.map((paragraph, index) => (
+                                        <div key={index} className="letter-paragraph">
+                                            {paragraph}
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Closing */}
+                                <div className="letter-closing">
+                                    <div style={{marginBottom: '50px'}}>
+                                        {generatedLetter.closing}
+                                    </div>
+                                    <div style={{fontWeight: '600'}}>
+                                        {generatedLetter.signature}
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
+
+                    <div style={{textAlign: 'center', marginTop: '40px'}}>
+                        <a 
+                            href="index.html" 
+                            style={{
+                                color: 'white',
+                                textDecoration: 'none',
+                                fontSize: '16px',
+                                fontWeight: '600',
+                                padding: '12px 24px',
+                                background: 'rgba(255,255,255,0.2)',
+                                borderRadius: '8px',
+                                display: 'inline-block',
+                                transition: 'all 0.2s'
+                            }}
+                            onMouseOver={(e) => e.target.style.background = 'rgba(255,255,255,0.3)'}
+                            onMouseOut={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
+                        >
+                            <i className="fas fa-arrow-left"></i> Back to Templates
+                        </a>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<AICoverLetterGenerator />, document.getElementById('root'));
+    </script>
+
+    <style>
+        @media print {
+            body {
+                background: white;
+            }
+            .card, .export-buttons, .header, a {
+                display: none !important;
+            }
+            .letter-preview {
+                box-shadow: none;
+                max-width: 100%;
+            }
+        }
+    </style>
+</body>
+</html>
