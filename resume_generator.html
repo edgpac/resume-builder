@@ -286,11 +286,11 @@
             };
 
             const generateResume = async () => {
-                setIsGenerating(true);
-                setError(null);
+    setIsGenerating(true);
+    setError(null);
 
-                try {
-                    const prompt = `Create a professional resume based on the following information. Format it as a structured JSON object with clear sections. Make the content professional and compelling.
+    try {
+        const prompt = `Create a professional resume based on the following information. Format it as a structured JSON object with clear sections. Make the content professional and compelling.
 
 Name: ${formData.name}
 Email: ${formData.email}
@@ -337,45 +337,39 @@ Please return ONLY a valid JSON object (no markdown, no backticks) with this str
   "skills": ["Skill 1", "Skill 2", "Skill 3", "etc"]
 }`;
 
-                    const response = await fetch("https://api.anthropic.com/v1/messages", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            model: "claude-sonnet-4-20250514",
-                            max_tokens: 2000,
-                            messages: [
-                                { role: "user", content: prompt }
-                            ],
-                        })
-                    });
+        const response = await fetch("/api/generate-resume", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                prompt: prompt
+            })
+        });
 
-                    const data = await response.json();
-                    
-                    if (data.error) {
-                        throw new Error(data.error.message || 'Failed to generate resume');
-                    }
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error.message || 'Failed to generate resume');
+        }
 
-                    const textContent = data.content
-                        .filter(item => item.type === "text")
-                        .map(item => item.text)
-                        .join("");
+        // Extract text from Groq response
+        const textContent = data.choices[0].message.content;
 
-                    const cleanedText = textContent
-                        .replace(/```json/g, '')
-                        .replace(/```/g, '')
-                        .trim();
+        const cleanedText = textContent
+            .replace(/```json/g, '')
+            .replace(/```/g, '')
+            .trim();
 
-                    const resumeData = JSON.parse(cleanedText);
-                    setGeneratedResume(resumeData);
-                    setIsGenerating(false);
-                } catch (err) {
-                    console.error('Error generating resume:', err);
-                    setError(err.message || 'Failed to generate resume. Please try again.');
-                    setIsGenerating(false);
-                }
-            };
+        const resumeData = JSON.parse(cleanedText);
+        setGeneratedResume(resumeData);
+        setIsGenerating(false);
+    } catch (err) {
+        console.error('Error generating resume:', err);
+        setError(err.message || 'Failed to generate resume. Please try again.');
+        setIsGenerating(false);
+    }
+};
 
             const downloadAsPNG = async () => {
                 try {
