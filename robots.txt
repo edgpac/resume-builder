@@ -1,0 +1,11 @@
+# robots.txt for Professional Resume Builder
+# Allow all search engines to crawl everything
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.coverlettersgpt.com/sitemap.xml
+
+# Crawl-delay (optional - prevents overloading server)
+Crawl-delay: 1
